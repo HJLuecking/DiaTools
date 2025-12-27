@@ -48,20 +48,26 @@ public class ReportParser
             if (HandleRefillEventData(dataSection, line, report)) continue;
             if (HandleInsulinBolusData(dataSection, line, report)) continue;
             if (HandleInsulinInfusionData(dataSection, line, report)) continue;
+            if (HandleGlucoseConcentrationData(dataSection, line, report)) continue;
         }
 
         return report;
     }
 
+
+
     private static DataSection CheckSection(string line)
     {
         if (line.StartsWith("Time") || line.StartsWith("(dd/")) return DataSection.ColumHeader;
         if (line.StartsWith("ID:")) return DataSection.Id;
+
         if (line.StartsWith("Meal")) return DataSection.Meal;
         if (line.StartsWith("Priming_event")) return DataSection.PrimingEvent;
         if (line.StartsWith("Refill_event")) return DataSection.RefillEvent;
         if (line.StartsWith("Insulin_bolus")) return DataSection.InsulinBolus;
         if (line.StartsWith("Insulin_infusion")) return DataSection.InsulinInfusion;
+        if (line.StartsWith("Glucose_concentration")) return DataSection.GlucoseConcentration;
+
         if (line.EndsWith("*")) return DataSection.NotImplementedSection;
 
         return DataSection.None;
@@ -71,6 +77,26 @@ public class ReportParser
     {
         if (dataSection != DataSection.Id) return false;
         report.Id = line[3..].Trim();
+        return true;
+    }
+
+    private bool HandleGlucoseConcentrationData(DataSection dataSection, string line, Report report)
+    {
+        if (dataSection != DataSection.GlucoseConcentration) return false;
+        var parts = line
+            .Split('\t', ' ')
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .ToArray();
+
+        if (parts.Length == 3)
+        {
+            report.GlucoseConcentrations.Add(new GlucoseConcentrationEntry
+            {
+                Time = ParseDateTime(parts),
+                MMolPerLitre = ParseDouble(parts[2])
+            });
+        }
+
         return true;
     }
 
@@ -177,6 +203,8 @@ public class ReportParser
         RefillEvent,
         InsulinBolus,
         InsulinInfusion,
-        NotImplementedSection
+        NotImplementedSection,
+        GlucoseConcentration
     }
 }
+

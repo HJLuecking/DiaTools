@@ -36,7 +36,12 @@ namespace CamAPS.DataReader.Tests
             // 26/09/2025 00:02	13.199999
             actual.InsulinInfusions.Count.Should().BeGreaterThan(0);
             actual.InsulinInfusions[0].UnitsPerHour.Should().Be(13.199999);
-            actual.InsulinInfusions[0].Time.ToString("ddMMyy-HHmm").Should().Be("260925-0002"); 
+            actual.InsulinInfusions[0].Time.ToString("ddMMyy-HHmm").Should().Be("260925-0002");
+
+            // 26/09/2025 00:04	6.383927549999999
+            actual.GlucoseConcentrations.Count.Should().BeGreaterThan(0);
+            actual.GlucoseConcentrations[0].MMolPerLitre.Should().Be(6.383927549999999);
+            actual.GlucoseConcentrations[0].Time.ToString("ddMMyy-HHmm").Should().Be("260925-0004");
 
         }
 

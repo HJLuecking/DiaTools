@@ -9,5 +9,6 @@
         public List<DateTime> RefillEvents { get; set; } = [];
         public List<InsulinBolusEntry> InsulinBoli { get; set; } = [];
         public List<InsulinInfusionEntry> InsulinInfusions { get; set; } = [];
+        public List<GlucoseConcentrationEntry> GlucoseConcentrations { get; set; } = [];
     }
 }
