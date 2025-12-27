@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="CamAPS.DataReader.Tests/CamAPS.DataReader.Tests.csproj" />
+  <Project Path="CamAPS.DataReader/CamAPS.DataReader.csproj" />
+</Solution>
