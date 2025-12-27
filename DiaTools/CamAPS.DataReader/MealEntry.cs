@@ -3,6 +3,6 @@
     public class MealEntry
     {
         public DateTime Time { get; set; }
-        public int ChoGrams { get; set; }
+        public double ChoGrams { get; set; }
     }
 }

@@ -4,8 +4,8 @@ namespace CamAPS.DataReader;
 
 public class ReportParser
 {
-    private static readonly CultureInfo Culture = CultureInfo.InvariantCulture;
     private const string DateFormat = "dd/MM/yyyy HH:mm";
+    private static readonly CultureInfo Culture = CultureInfo.InvariantCulture;
 
 
     public Report Parse(string input)
@@ -36,14 +36,17 @@ public class ReportParser
             if (lineSection == DataSection.ColumHeader) continue;
 
             // Handle data sections
-            if (lineSection != DataSection.None) {dataSection = lineSection; continue;}
-            if (HandleMealData(dataSection, line, report)) continue; 
+            if (lineSection != DataSection.None)
+            {
+                dataSection = lineSection;
+                continue;
+            }
+
+            if (HandleMealData(dataSection, line, report)) continue;
             if (HandlePrimingEventData(dataSection, line, report)) continue;
             if (HandleRefillEventData(dataSection, line, report)) continue;
             if (HandleInsulinBolusData(dataSection, line, report)) continue;
             if (HandleInsulinInfusionData(dataSection, line, report)) continue;
-
-            
         }
 
         return report;
@@ -57,7 +60,7 @@ public class ReportParser
             .Where(p => !string.IsNullOrWhiteSpace(p))
             .ToArray();
 
-        if (parts.Length == 2)
+        if (parts.Length == 3)
         {
             report.InsulinInfusions.Add(new InsulinInfusionEntry
             {
@@ -65,6 +68,7 @@ public class ReportParser
                 UnitsPerHour = double.Parse(parts[1])
             });
         }
+
         return true;
     }
 
@@ -76,14 +80,15 @@ public class ReportParser
             .Where(p => !string.IsNullOrWhiteSpace(p))
             .ToArray();
 
-        if (parts.Length == 2)
+        if (parts.Length == 4)
         {
             report.InsulinBoli.Add(new InsulinBolusEntry
             {
                 Time = ParseExact(parts),
-                Units = double.Parse(parts[1])
+                Units = double.Parse(parts[2])
             });
         }
+
         return true;
     }
 
@@ -105,7 +110,6 @@ public class ReportParser
         if (dataSection != DataSection.RefillEvent) return false;
         if (TryParseExact(line, out var time)) report.RefillEvents.Add(time);
         return true;
-
     }
 
     private static bool HandleMealData(DataSection dataSection, string line, Report report)
@@ -117,16 +121,16 @@ public class ReportParser
             .Where(p => !string.IsNullOrWhiteSpace(p))
             .ToArray();
 
-        if (parts.Length == 2)
+        if (parts.Length == 3)
         {
             report.Meals.Add(new MealEntry
             {
                 Time = ParseExact(parts),
-                ChoGrams = int.Parse(parts[1])
+                ChoGrams = double.Parse(parts[2])
             });
         }
-        return true;
 
+        return true;
     }
 
     private static bool HandleIdSection(DataSection dataSection, Report report, string line)
@@ -134,7 +138,23 @@ public class ReportParser
         if (dataSection != DataSection.Id) return false;
         report.Id = line[3..].Trim();
         return true;
+    }
 
+    private static DataSection CheckSection(string line)
+    {
+        if (line.StartsWith("Time") || line.StartsWith("(dd/")) return DataSection.ColumHeader;
+        if (line.StartsWith("ID:")) return DataSection.Id;
+        if (line.StartsWith("Meal")) return DataSection.Meal;
+        if (line.StartsWith("Priming_event")) return DataSection.PrimingEvent;
+        if (line.StartsWith("Refill_event")) return DataSection.RefillEvent;
+        if (line.StartsWith("Insulin_bolus")) return DataSection.InsulinBolus;
+        return DataSection.None;
+    }
+
+
+    private static bool TryParseExact(string line, out DateTime time)
+    {
+        return DateTime.TryParseExact(line, DateFormat, Culture, DateTimeStyles.None, out time);
     }
 
     private enum DataSection
@@ -147,23 +167,5 @@ public class ReportParser
         RefillEvent,
         InsulinBolus,
         InsulinInfusion
-    }
-
-    private static DataSection CheckSection(string line)
-    {
-        if (line.StartsWith("Time") || line.StartsWith("(dd/")) return DataSection.ColumHeader;
-        if (line.StartsWith("ID:")) return DataSection.Id;
-        if (line.StartsWith("Meal")) return DataSection.Meal;
-        if (line.StartsWith("Priming_event")) return DataSection.PrimingEvent;
-        if (line.StartsWith("Refill_event")) return DataSection.RefillEvent;
-        if (line.StartsWith("Insulin_bolus")) return DataSection.InsulinBolus;
-        return DataSection.None;
-        
-    }
-
-
-    private static bool TryParseExact(string line, out DateTime time)
-    {
-        return DateTime.TryParseExact(line, DateFormat, Culture, DateTimeStyles.None, out time);
     }
 }
