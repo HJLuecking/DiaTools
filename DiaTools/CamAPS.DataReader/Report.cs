@@ -3,6 +3,7 @@
     public class Report
     {
         public string Id { get; set; } = string.Empty;
+        public int LinesRead { get; set; }
         public List<MealEntry> Meals { get; set; } = [];
         public List<DateTime> PrimingEvents { get; set; } = [];
         public List<DateTime> RefillEvents { get; set; } = [];

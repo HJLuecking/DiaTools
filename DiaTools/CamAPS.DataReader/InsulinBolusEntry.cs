@@ -6,8 +6,3 @@ public class InsulinBolusEntry
     public double Units { get; set; }
     public int Minutes { get; set; }
 }
-public class InsulinInfusionEntry
-{
-    public DateTime Time { get; set; }
-    public double UnitsPerHour { get; set; }
-}
