@@ -4,7 +4,8 @@ using Xunit.Abstractions;
 
 namespace BasalRateCalculator.Tests
 {
-    public class BasalRateCalculatorTests(ITestOutputHelper testOutputHelper)
+    public class BasalRateRecommendationEngineTests(ITestOutputHelper testOutputHelper)
+
     {
         [Fact]
         public void CalculateAverageHourlyBasalRate_UsingCamApsTestFile_ProducesHourlyAverages()
@@ -26,21 +27,26 @@ namespace BasalRateCalculator.Tests
                 .ToList();
 
             var calculator = new BasalRateCalculator();
-
-            // Act
             var statistics = calculator.CollectBasalRateStatistics(glucoseValues, basalValues);
             var averagePerHour = statistics.AveragePerHour;
             var countPerHour = statistics.CountPerHour;
+            var recommendationEngine = new BasalRateRecommendationEngine();
+
+            // Act
+
+            var recommendBasalRates = recommendationEngine.RecommendBasalRates(averagePerHour);
             // Assert
-            averagePerHour.Keys.Count.Should().Be(24);
-            averagePerHour.Values.Should().NotBeNull().And.Contain(x => x > 0); // Assert that at least one-hour has average > 0
+            recommendBasalRates.Keys.Count.Should().Be(24);
+            recommendBasalRates.Values.Should().NotBeNull().And.Contain(x => x > 0); // Assert that at least one-hour has average > 0
 
             for (var i = 0; i < 24; i++)
             {
+                var r = recommendBasalRates[i];
                 var d = averagePerHour[i];
                 var c = countPerHour[i];
-                testOutputHelper.WriteLine($"{i} - {d:F1} - {c}");
+                testOutputHelper.WriteLine($"{i} - {r:F1} - {d:F1} - {c}");
             }
-        } 
+        }
     }
 }
+

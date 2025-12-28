@@ -16,7 +16,7 @@ public class BasalRateCalculator
     /// considered.</param>
     /// <returns>A dictionary mapping each hour of the day (0–23) to the average basal insulin rate for that hour.
     /// If no data is available for a given hour, that hour will not appear in the dictionary.</returns>
-    public Dictionary<int, double> CalculateAverageHourlyBasalRate(
+    public BasalRateStatistics CollectBasalRateStatistics(
         List<DoubleTimeValue> glucoseValuesMMol,
         List<DoubleTimeValue> insulinBasal)
     {
@@ -30,7 +30,11 @@ public class BasalRateCalculator
         CollectHourlyStatistics(filteredBasal, sumPerHour, countPerHour);
         var averagePerHour = ComputeAveragePerHour(sumPerHour, countPerHour);
 
-        return averagePerHour;
+        return new BasalRateStatistics()
+        {
+            AveragePerHour = averagePerHour,
+            CountPerHour = countPerHour
+        };
     }
 
     /// <summary>
@@ -153,4 +157,10 @@ public class BasalRateCalculator
 
         return references;
     }
+}
+
+public class BasalRateStatistics
+{
+    public Dictionary<int, double> AveragePerHour { get; set; } = [];
+    public Dictionary<int, int> CountPerHour { get; set; } = [];
 }
