@@ -3,31 +3,31 @@
 public class BasalRateCalculator
 {
     private const double MMolToMgDl = 18.0182;
-    private const double MinGlucose = 100.0;
-    private const double MaxGlucose = 140.0;
+    private const double MinGlucose = 90.0;
+    private const double MaxGlucose = 150.0;
 
     /// <summary>
-    /// Calculates the average hourly basal insulin rate based on provided glucose and insulin bolus data.
+    /// Calculates the average hourly basal insulin rate based on provided glucose and insulin basal data.
     /// </summary>
     /// <param name="glucoseValuesMMol">A list of glucose measurements, where each value represents a glucose
     /// reading in mmol/L at a specific time.  Used to determine relevant time intervals for analysis.</param>
-    /// <param name="insulinBolus">A list of insulin bolus entries, where each value represents an insulin dose
-    /// administered at a specific  time. Only boluses within the time range defined by the glucose values are
+    /// <param name="insulinBasal">A list of insulin basal entries, where each value represents an insulin dose
+    /// administered at a specific  time. Only basales within the time range defined by the glucose values are
     /// considered.</param>
     /// <returns>A dictionary mapping each hour of the day (0–23) to the average basal insulin rate for that hour.
     /// If no data is available for a given hour, that hour will not appear in the dictionary.</returns>
     public Dictionary<int, double> CalculateAverageHourlyBasalRate(
         List<DoubleTimeValue> glucoseValuesMMol,
-        List<DoubleTimeValue> insulinBolus)
+        List<DoubleTimeValue> insulinBasal)
     {
         var filteredGlucose = FilterGlucoseValuesAsMgDl(glucoseValuesMMol);
         var timeReferences = ExtractTimeReferences(filteredGlucose);
-        var filteredBolus = FilterBolusByGlucoseTimesInRange(insulinBolus, timeReferences);
+        var filteredBasal = FilterBasalByGlucoseTimesInRange(insulinBasal, timeReferences);
             
         var sumPerHour = PrepareSumPerHour();
         var countPerHour = PrepareCountPerHour();
             
-        CollectHourlyStatistics(filteredBolus, sumPerHour, countPerHour);
+        CollectHourlyStatistics(filteredBasal, sumPerHour, countPerHour);
         var averagePerHour = ComputeAveragePerHour(sumPerHour, countPerHour);
 
         return averagePerHour;
@@ -53,12 +53,12 @@ public class BasalRateCalculator
         return averagePerHour;
     }
 
-    private static void CollectHourlyStatistics(List<DoubleTimeValue> filteredBolus, Dictionary<int, double> sumPerHour, Dictionary<int, int> countPerHour)
+    private static void CollectHourlyStatistics(List<DoubleTimeValue> filteredBasal, Dictionary<int, double> sumPerHour, Dictionary<int, int> countPerHour)
     {
-        foreach (var bolus in filteredBolus)
+        foreach (var basal in filteredBasal)
         {
-            var hour = bolus.Timestamp.Hour;
-            sumPerHour[hour] += bolus.Value;
+            var hour = basal.Timestamp.Hour;
+            sumPerHour[hour] += basal.Value;
             countPerHour[hour]++;
         }
     }
@@ -81,14 +81,14 @@ public class BasalRateCalculator
         return sumPerHour;
     }
 
-    private static List<DoubleTimeValue> FilterBolusByGlucoseTimesInRange(List<DoubleTimeValue> insulinBolus, List<TimeReference> timeReferences)
+    private static List<DoubleTimeValue> FilterBasalByGlucoseTimesInRange(List<DoubleTimeValue> insulinBasal, List<TimeReference> timeReferences)
     {
-        var filteredBolus = insulinBolus
+        var filteredBasal = insulinBasal
             .Where(b => timeReferences.Any(tr =>
                 b.Timestamp >= tr.Start &&
                 b.Timestamp <= tr.End))
             .ToList();
-        return filteredBolus;
+        return filteredBasal;
     }
 
     /// <summary>

@@ -1,21 +1,11 @@
-﻿using System.Linq;
-using AwesomeAssertions;
-using BasalRateCalculator;
+﻿using AwesomeAssertions;
 using CamAPS.DataReader;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace BasalRateCalculator.Tests
 {
-    public class BasalRateCalculatorTests
+    public class BasalRateCalculatorTests(ITestOutputHelper testOutputHelper)
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public BasalRateCalculatorTests(ITestOutputHelper testOutputHelper)
-        {
-            _testOutputHelper = testOutputHelper;
-        }
-
         [Fact]
         public void CalculateAverageHourlyBasalRate_UsingCamApsTestFile_ProducesHourlyAverages()
         {
@@ -31,14 +21,14 @@ namespace BasalRateCalculator.Tests
                 .Select(g => new DoubleTimeValue(g.Time, g.MMolPerLitre))
                 .ToList();
 
-            var bolusValues = report.InsulinBoli
-                .Select(b => new DoubleTimeValue(b.Time, b.Units))
+            var basalValues = report.InsulinInfusions
+                .Select(b => new DoubleTimeValue(b.Time, b.UnitsPerHour))
                 .ToList();
 
             var calculator = new BasalRateCalculator();
 
             // Act
-            var result = calculator.CalculateAverageHourlyBasalRate(glucoseValues, bolusValues);
+            var result = calculator.CalculateAverageHourlyBasalRate(glucoseValues, basalValues);
 
             // Assert
             result.Keys.Count.Should().Be(24);
@@ -46,7 +36,7 @@ namespace BasalRateCalculator.Tests
 
             foreach (var d in result)
             {
-                _testOutputHelper.WriteLine($"{d.Key} - {d.Value}" );
+                testOutputHelper.WriteLine($"{d.Key} - {d.Value:F1}" );
             }
         } 
     }
