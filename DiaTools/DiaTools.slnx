@@ -1,4 +1,6 @@
 <Solution>
+  <Project Path="BasalRateCalculator.Tests/BasalRateCalculator.Tests.csproj" Id="f0bc2a9b-e05d-4b99-90af-0174386ce479" />
+  <Project Path="BasalRateCalculator/BasalRateCalculator.csproj" Id="7d17217f-496a-4cf0-8026-34272dca30b9" />
   <Project Path="CamAPS.DataReader.Tests/CamAPS.DataReader.Tests.csproj" />
   <Project Path="CamAPS.DataReader/CamAPS.DataReader.csproj" />
 </Solution>
