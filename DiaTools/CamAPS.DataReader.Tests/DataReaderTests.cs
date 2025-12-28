@@ -21,7 +21,7 @@ namespace CamAPS.DataReader.Tests
             var reportParser = new ReportParser();
             var actual = reportParser.Parse(_lines);
             _testOutputHelper.WriteLine(actual.LinesRead.ToString());
-            actual.Id.Should().NotBeNullOrWhiteSpace().And.Be("h-j.luecking@t-online.de");
+            actual.Id.Should().Be("h-j.luecking@t-online.de");
             var dateFormat = @"dd\/MM\/yyyy HH:mm";
 
             // 26/09/2025 09:15
@@ -45,9 +45,21 @@ namespace CamAPS.DataReader.Tests
             actual.GlucoseConcentrations[0].Time.ToString(dateFormat).Should().Be("26/09/2025 00:04");
 
             // 26/10/2025 15:31	2.2203999999999997 c
-            actual.FingerstickGlucoseConcentrations.Count.Should().BeGreaterThan(0);
+            actual.FingerstickGlucoseConcentrations.Count.Should().Be(3);
             actual.FingerstickGlucoseConcentrations[0].MMolPerLitre.Should().Be(2.2203999999999997);
             actual.FingerstickGlucoseConcentrations[0].Time.ToString(dateFormat).Should().Be("26/10/2025 15:31");
+
+            // 26/09/2025 09:20
+            actual.SensorInsertedEvents.Count.Should().BeGreaterThan(0);
+            actual.SensorInsertedEvents[0].ToString(dateFormat).Should().Be("26/09/2025 09:20");
+
+            // 26/09/2025 00:07
+            actual.RefillEvents.Count.Should().BeGreaterThan(0);
+            actual.RefillEvents[0].ToString(dateFormat).Should().Be("26/09/2025 00:07");
+
+            // 26/09/2025 00:07
+            actual.PrimingEvents.Count.Should().Be(1);
+            actual.PrimingEvents[0].ToString(dateFormat).Should().Be("26/09/2025 00:07");
 
         }
 

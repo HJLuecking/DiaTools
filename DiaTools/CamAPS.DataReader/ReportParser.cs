@@ -50,9 +50,17 @@ public class ReportParser
             if (HandleInsulinInfusionData(dataSection, line, report)) continue;
             if (HandleGlucoseConcentrationData(dataSection, line, report)) continue;
             if (HandleFingerstickGlucoseConcentrationData(dataSection, line, report)) continue;
+            if (HandleSensorInsertedData(dataSection, line, report)) continue;
         }
 
         return report;
+    }
+
+    private bool HandleSensorInsertedData(DataSection dataSection, string line, Report report)
+    {
+        if (dataSection != DataSection.SensorInserted) return false;
+        if (TryParseExact(line, out var time)) report.SensorInsertedEvents.Add(time);
+        return true;
     }
 
     private bool HandleFingerstickGlucoseConcentrationData(DataSection dataSection, string line, Report report)
@@ -91,6 +99,7 @@ public class ReportParser
         if (line.StartsWith("Insulin_infusion")) return DataSection.InsulinInfusion;
         if (line.StartsWith("Glucose_concentration")) return DataSection.GlucoseConcentration;
         if (line.StartsWith("Fingerstick_glucose_concentration")) return DataSection.FingerstickGlucoseConcentration;
+        if (line.StartsWith("Sensor_inserted")) return DataSection.SensorInserted;
 
         
         if (line.EndsWith("*")) return DataSection.NotImplementedSection;
@@ -230,7 +239,8 @@ public class ReportParser
         InsulinInfusion,
         NotImplementedSection,
         GlucoseConcentration,
-        FingerstickGlucoseConcentration
+        FingerstickGlucoseConcentration,
+        SensorInserted
     }
 }
 
