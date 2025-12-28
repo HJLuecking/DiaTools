@@ -49,11 +49,34 @@ public class ReportParser
             if (HandleInsulinBolusData(dataSection, line, report)) continue;
             if (HandleInsulinInfusionData(dataSection, line, report)) continue;
             if (HandleGlucoseConcentrationData(dataSection, line, report)) continue;
+            if (HandleFingerstickGlucoseConcentrationData(dataSection, line, report)) continue;
         }
 
         return report;
     }
 
+    private bool HandleFingerstickGlucoseConcentrationData(DataSection dataSection, string line, Report report)
+    {
+        if (dataSection != DataSection.FingerstickGlucoseConcentration) return false;
+
+        // 26/10/2025 15:31	2.2203999999999997 c
+
+        var parts = line
+            .Split('\t', ' ')
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .ToArray();
+
+        if (parts.Length == 4)
+        {
+            report.FingerstickGlucoseConcentrations.Add(new FingerstickGlucoseConcentrationEntry
+            {
+                Time = ParseDateTime(parts),
+                MMolPerLitre = ParseDouble(parts[2])
+            });
+        }
+
+        return true;
+    }
 
 
     private static DataSection CheckSection(string line)
@@ -67,7 +90,9 @@ public class ReportParser
         if (line.StartsWith("Insulin_bolus")) return DataSection.InsulinBolus;
         if (line.StartsWith("Insulin_infusion")) return DataSection.InsulinInfusion;
         if (line.StartsWith("Glucose_concentration")) return DataSection.GlucoseConcentration;
+        if (line.StartsWith("Fingerstick_glucose_concentration")) return DataSection.FingerstickGlucoseConcentration;
 
+        
         if (line.EndsWith("*")) return DataSection.NotImplementedSection;
 
         return DataSection.None;
@@ -204,7 +229,8 @@ public class ReportParser
         InsulinBolus,
         InsulinInfusion,
         NotImplementedSection,
-        GlucoseConcentration
+        GlucoseConcentration,
+        FingerstickGlucoseConcentration
     }
 }
 

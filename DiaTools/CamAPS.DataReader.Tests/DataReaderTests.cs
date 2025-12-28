@@ -22,26 +22,32 @@ namespace CamAPS.DataReader.Tests
             var actual = reportParser.Parse(_lines);
             _testOutputHelper.WriteLine(actual.LinesRead.ToString());
             actual.Id.Should().NotBeNullOrWhiteSpace().And.Be("h-j.luecking@t-online.de");
+            var dateFormat = @"dd\/MM\/yyyy HH:mm";
 
             // 26/09/2025 09:15
             actual.Meals.Count.Should().BeGreaterThan(0);
             actual.Meals[0].ChoGrams.Should().Be(12);
-            actual.Meals[0].Time.ToString("ddMMyy-HHmm").Should().Be("260925-0915"); 
+            actual.Meals[0].Time.ToString(dateFormat).Should().Be("26/09/2025 09:15"); 
 
             // 26/09/2025 09:14
             actual.InsulinBoli.Count.Should().BeGreaterThan(0);
             actual.InsulinBoli[0].Units.Should().Be(3);
-            actual.InsulinBoli[0].Time.ToString("ddMMyy-HHmm").Should().Be("260925-0914"); 
+            actual.InsulinBoli[0].Time.ToString(dateFormat).Should().Be("26/09/2025 09:14"); 
 
             // 26/09/2025 00:02	13.199999
             actual.InsulinInfusions.Count.Should().BeGreaterThan(0);
             actual.InsulinInfusions[0].UnitsPerHour.Should().Be(13.199999);
-            actual.InsulinInfusions[0].Time.ToString("ddMMyy-HHmm").Should().Be("260925-0002");
+            actual.InsulinInfusions[0].Time.ToString(dateFormat).Should().Be("26/09/2025 00:02");
 
             // 26/09/2025 00:04	6.383927549999999
             actual.GlucoseConcentrations.Count.Should().BeGreaterThan(0);
             actual.GlucoseConcentrations[0].MMolPerLitre.Should().Be(6.383927549999999);
-            actual.GlucoseConcentrations[0].Time.ToString("ddMMyy-HHmm").Should().Be("260925-0004");
+            actual.GlucoseConcentrations[0].Time.ToString(dateFormat).Should().Be("26/09/2025 00:04");
+
+            // 26/10/2025 15:31	2.2203999999999997 c
+            actual.FingerstickGlucoseConcentrations.Count.Should().BeGreaterThan(0);
+            actual.FingerstickGlucoseConcentrations[0].MMolPerLitre.Should().Be(2.2203999999999997);
+            actual.FingerstickGlucoseConcentrations[0].Time.ToString(dateFormat).Should().Be("26/10/2025 15:31");
 
         }
 
