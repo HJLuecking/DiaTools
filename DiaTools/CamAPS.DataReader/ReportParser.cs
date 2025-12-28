@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.IO;
 
 namespace CamAPS.DataReader;
 
@@ -43,56 +44,22 @@ public class ReportParser
                 continue;
             }
 
-            if (HandleMealData(dataSection, line, report)) continue;
-            if (HandlePrimingEventData(dataSection, line, report)) continue;
-            if (HandleRefillEventData(dataSection, line, report)) continue;
-            if (HandleInsulinBolusData(dataSection, line, report)) continue;
-            if (HandleInsulinInfusionData(dataSection, line, report)) continue;
-            if (HandleGlucoseConcentrationData(dataSection, line, report)) continue;
-            if (HandleFingerstickGlucoseConcentrationData(dataSection, line, report)) continue;
-            if (HandleSensorInsertedData(dataSection, line, report)) continue;
-            if (HandleSensorStoppedData(dataSection, line, report)) continue;
-            
+            var parts = SplitLine(line);
+
+            if (HandlePrimingEventData(dataSection, parts, report)) continue;
+            if (HandleSensorInsertedData(dataSection, parts, report)) continue;
+            if (HandleSensorStoppedData(dataSection, parts, report)) continue;
+            if (HandleRefillEventData(dataSection, parts, report)) continue;
+
+            if (HandleMealData(dataSection, parts, report)) continue;
+            if (HandleInsulinBolusData(dataSection, parts, report)) continue;
+            if (HandleInsulinInfusionData(dataSection, parts, report)) continue;
+            if (HandleGlucoseConcentrationData(dataSection, parts, report)) continue;
+            if (HandleFingerstickGlucoseConcentrationData(dataSection, parts, report)) continue;
+
         }
 
         return report;
-    }
-
-    private bool HandleSensorStoppedData(DataSection dataSection, string line, Report report)
-    {
-        if (dataSection != DataSection.SensorStopped) return false;
-        if (TryParseExact(line, out var time)) report.SensorStoppedEvents.Add(time);
-        return true;
-    }
-
-    private bool HandleSensorInsertedData(DataSection dataSection, string line, Report report)
-    {
-        if (dataSection != DataSection.SensorInserted) return false;
-        if (TryParseExact(line, out var time)) report.SensorInsertedEvents.Add(time);
-        return true;
-    }
-
-    private bool HandleFingerstickGlucoseConcentrationData(DataSection dataSection, string line, Report report)
-    {
-        if (dataSection != DataSection.FingerstickGlucoseConcentration) return false;
-
-        // 26/10/2025 15:31	2.2203999999999997 c
-
-        var parts = line
-            .Split('\t', ' ')
-            .Where(p => !string.IsNullOrWhiteSpace(p))
-            .ToArray();
-
-        if (parts.Length == 4)
-        {
-            report.FingerstickGlucoseConcentrations.Add(new FingerstickGlucoseConcentrationEntry
-            {
-                Time = ParseDateTime(parts),
-                MMolPerLitre = ParseDouble(parts[2])
-            });
-        }
-
-        return true;
     }
 
 
@@ -111,32 +78,18 @@ public class ReportParser
         if (line.StartsWith("Sensor_inserted")) return DataSection.SensorInserted;
         if (line.StartsWith("Sensor_stopped")) return DataSection.SensorStopped;
 
-        
-
 
         if (line.EndsWith("*")) return DataSection.NotImplementedSection;
 
         return DataSection.None;
     }
 
-    private static bool HandleIdSection(DataSection dataSection, Report report, string line)
+    private static bool HandleFingerstickGlucoseConcentrationData(DataSection dataSection, string[] parts, Report report)
     {
-        if (dataSection != DataSection.Id) return false;
-        report.Id = line[3..].Trim();
-        return true;
-    }
-
-    private bool HandleGlucoseConcentrationData(DataSection dataSection, string line, Report report)
-    {
-        if (dataSection != DataSection.GlucoseConcentration) return false;
-        var parts = line
-            .Split('\t', ' ')
-            .Where(p => !string.IsNullOrWhiteSpace(p))
-            .ToArray();
-
-        if (parts.Length == 3)
+        if (dataSection != DataSection.FingerstickGlucoseConcentration) return false;
+        if (parts.Length == 4)
         {
-            report.GlucoseConcentrations.Add(new GlucoseConcentrationEntry
+            report.FingerstickGlucoseConcentrations.Add(new FingerstickGlucoseConcentrationEntry
             {
                 Time = ParseDateTime(parts),
                 MMolPerLitre = ParseDouble(parts[2])
@@ -146,14 +99,40 @@ public class ReportParser
         return true;
     }
 
-    private bool HandleInsulinBolusData(DataSection dataSection, string line, Report report)
+    private static bool HandleGlucoseConcentrationData(DataSection dataSection, string[] parts, Report report)
     {
-        if (dataSection != DataSection.InsulinBolus) return false;
+        if (dataSection != DataSection.GlucoseConcentration) return false;
+
+        if (parts.Length == 3)
+        {
+            report.GlucoseConcentrations.Add(new GlucoseConcentrationEntry
+            {
+                Time = ParseDateTime(parts),
+                MMolPerLitre = ParseDouble(parts[2])
+            });
+        }
+        return true;
+    }
+
+    private static string[] SplitLine(string line)
+    {
         var parts = line
             .Split('\t', ' ')
             .Where(p => !string.IsNullOrWhiteSpace(p))
             .ToArray();
+        return parts;
+    }
 
+    private static bool HandleIdSection(DataSection dataSection, Report report, string line)
+    {
+        if (dataSection != DataSection.Id) return false;
+        report.Id = line[3..].Trim();
+        return true;
+    }
+
+    private static bool HandleInsulinBolusData(DataSection dataSection, string[] parts, Report report)
+    {
+        if (dataSection != DataSection.InsulinBolus) return false;
         if (parts.Length == 4)
         {
             report.InsulinBoli.Add(new InsulinBolusEntry
@@ -166,15 +145,9 @@ public class ReportParser
         return true;
     }
 
-    private bool HandleInsulinInfusionData(DataSection dataSection, string line, Report report)
+    private static bool HandleInsulinInfusionData(DataSection dataSection, string[] parts, Report report)
     {
         if (dataSection != DataSection.InsulinInfusion) return false;
-
-        var parts = line
-            .Split('\t', ' ')
-            .Where(p => !string.IsNullOrWhiteSpace(p))
-            .ToArray();
-
         if (parts.Length == 3)
         {
             report.InsulinInfusions.Add(new InsulinInfusionEntry
@@ -187,15 +160,9 @@ public class ReportParser
         return true;
     }
 
-    private static bool HandleMealData(DataSection dataSection, string line, Report report)
+    private static bool HandleMealData(DataSection dataSection, string[] parts, Report report)
     {
         if (dataSection != DataSection.Meal) return false;
-
-        var parts = line
-            .Split('\t', ' ')
-            .Where(p => !string.IsNullOrWhiteSpace(p))
-            .ToArray();
-
         if (parts.Length == 3)
         {
             report.Meals.Add(new MealEntry
@@ -208,23 +175,37 @@ public class ReportParser
         return true;
     }
 
-    private static double ParseDouble(string part)
-    {
-        return double.Parse(part, Culture);
-    }
 
-    private static bool HandlePrimingEventData(DataSection dataSection, string line, Report report)
+    private static bool HandlePrimingEventData(DataSection dataSection, string[] parts, Report report)
     {
         if (dataSection != DataSection.PrimingEvent) return false;
-        if (TryParseExact(line, out var time)) report.PrimingEvents.Add(time);
+        var time = ParseDateTime(parts);
+        report.PrimingEvents.Add(time);
         return true;
     }
 
 
-    private static bool HandleRefillEventData(DataSection dataSection, string line, Report report)
+    private static bool HandleRefillEventData(DataSection dataSection, string[] parts, Report report)
     {
         if (dataSection != DataSection.RefillEvent) return false;
-        if (TryParseExact(line, out var time)) report.RefillEvents.Add(time);
+        var time = ParseDateTime(parts);
+        report.RefillEvents.Add(time);
+        return true;
+    }
+
+    private bool HandleSensorInsertedData(DataSection dataSection, string[] parts, Report report)
+    {
+        if (dataSection != DataSection.SensorInserted) return false;
+        var time = ParseDateTime(parts);
+        report.SensorInsertedEvents.Add(time);
+        return true;
+    }
+
+    private bool HandleSensorStoppedData(DataSection dataSection, string[] parts, Report report)
+    {
+        if (dataSection != DataSection.SensorStopped) return false;
+        var time = ParseDateTime(parts);
+        report.SensorStoppedEvents.Add(time);
         return true;
     }
 
@@ -233,10 +214,9 @@ public class ReportParser
         return DateTime.ParseExact(parts[0] + " " + parts[1], DateFormat, Culture);
     }
 
-
-    private static bool TryParseExact(string line, out DateTime time)
+    private static double ParseDouble(string part)
     {
-        return DateTime.TryParseExact(line, DateFormat, Culture, DateTimeStyles.None, out time);
+        return double.Parse(part, Culture);
     }
 
     private enum DataSection
@@ -256,4 +236,3 @@ public class ReportParser
         SensorStopped
     }
 }
-
