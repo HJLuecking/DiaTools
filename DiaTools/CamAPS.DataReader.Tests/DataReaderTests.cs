@@ -61,6 +61,10 @@ namespace CamAPS.DataReader.Tests
             actual.PrimingEvents.Count.Should().Be(1);
             actual.PrimingEvents[0].ToString(dateFormat).Should().Be("26/09/2025 00:07");
 
+            // 26/09/2025 00:07
+            actual.SensorStoppedEvents.Count.Should().Be(1);
+            actual.SensorStoppedEvents[0].ToString(dateFormat).Should().Be("26/09/2025 00:07");
+
         }
 
     }
