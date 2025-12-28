@@ -1,4 +1,4 @@
-﻿namespace CamAPS.DataReader
+﻿namespace CamAPS.DataReader.Entries
 {
     public class MealEntry
     {
