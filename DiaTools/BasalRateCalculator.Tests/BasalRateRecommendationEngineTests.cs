@@ -46,6 +46,8 @@ namespace BasalRateCalculator.Tests
                 var c = countPerHour[i];
                 testOutputHelper.WriteLine($"{i} - {r:F1} - {d:F1} - {c}");
             }
+            testOutputHelper.WriteLine("Sum: " + averagePerHour.Values.Sum(x => x).ToString("F1"));
+
         }
     }
 }

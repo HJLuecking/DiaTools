@@ -1,4 +1,4 @@
-﻿namespace CamAPS.DataReader.Entries;
+﻿namespace BasalRateCalculator.Model;
 
 public class FingerstickGlucoseConcentrationEntry
 {

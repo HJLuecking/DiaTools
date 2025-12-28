@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using CamAPS.DataReader.Entries;
+using BasalRateCalculator.Model;
 
 namespace CamAPS.DataReader;
 

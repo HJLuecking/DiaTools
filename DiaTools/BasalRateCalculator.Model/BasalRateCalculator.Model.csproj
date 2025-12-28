@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BasalRateCalculator.Model\BasalRateCalculator.Model.csproj" />
-  </ItemGroup>
-
 </Project>

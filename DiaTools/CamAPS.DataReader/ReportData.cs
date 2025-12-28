@@ -1,4 +1,4 @@
-﻿using CamAPS.DataReader.Entries;
+﻿using BasalRateCalculator.Model;
 
 namespace CamAPS.DataReader;
 
