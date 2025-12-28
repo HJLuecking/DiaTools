@@ -11,8 +11,10 @@
         public List<InsulinInfusionEntry> InsulinInfusions { get; set; } = [];
         public List<GlucoseConcentrationEntry> GlucoseConcentrations { get; set; } = [];
         public List<FingerstickGlucoseConcentrationEntry> FingerstickGlucoseConcentrations { get; set; } = [];
-        public List<DateTime> SensorInsertedEvents { get; set; } = [];
-        public List<DateTime> SensorStoppedEvents { get; set; } = [];
+        public List<DateTime> SensorInsertions { get; set; } = [];
+        public List<DateTime> SensorStopps { get; set; } = [];
+        public List<DateTime> AudioAlerts { get; set; } = []; 
+        public List<DateTime> VibrateAlerts { get; set; } = [];
     }
 }
 

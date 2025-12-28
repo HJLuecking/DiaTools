@@ -50,6 +50,8 @@ public class ReportParser
             if (HandleSensorInsertedData(dataSection, parts, report)) continue;
             if (HandleSensorStoppedData(dataSection, parts, report)) continue;
             if (HandleRefillEventData(dataSection, parts, report)) continue;
+            if (HandleAudioAlertsData(dataSection, parts, report)) continue;
+            if (HandleVibrateAlertsData(dataSection, parts, report)) continue;
 
             if (HandleMealData(dataSection, parts, report)) continue;
             if (HandleInsulinBolusData(dataSection, parts, report)) continue;
@@ -77,6 +79,8 @@ public class ReportParser
         if (line.StartsWith("Fingerstick_glucose_concentration")) return DataSection.FingerstickGlucoseConcentration;
         if (line.StartsWith("Sensor_inserted")) return DataSection.SensorInserted;
         if (line.StartsWith("Sensor_stopped")) return DataSection.SensorStopped;
+        if (line.StartsWith("Audio_alerts")) return DataSection.AudioAlerts;
+        if (line.StartsWith("Vibrate_alerts")) return DataSection.VibrateAlerts;
 
 
         if (line.EndsWith("*")) return DataSection.NotImplementedSection;
@@ -184,6 +188,22 @@ public class ReportParser
         return true;
     }
 
+    private bool HandleVibrateAlertsData(DataSection dataSection, string[] parts, Report report)
+    {
+        if (dataSection != DataSection.VibrateAlerts) return false;
+        var time = ParseDateTime(parts);
+        report.VibrateAlerts.Add(time);
+        return true;
+    }
+
+    private bool HandleAudioAlertsData(DataSection dataSection, string[] parts, Report report)
+    {
+        if (dataSection != DataSection.AudioAlerts) return false;
+        var time = ParseDateTime(parts);
+        report.AudioAlerts.Add(time);
+        return true;
+    }
+
 
     private static bool HandleRefillEventData(DataSection dataSection, string[] parts, Report report)
     {
@@ -197,7 +217,7 @@ public class ReportParser
     {
         if (dataSection != DataSection.SensorInserted) return false;
         var time = ParseDateTime(parts);
-        report.SensorInsertedEvents.Add(time);
+        report.SensorInsertions.Add(time);
         return true;
     }
 
@@ -205,7 +225,7 @@ public class ReportParser
     {
         if (dataSection != DataSection.SensorStopped) return false;
         var time = ParseDateTime(parts);
-        report.SensorStoppedEvents.Add(time);
+        report.SensorStopps.Add(time);
         return true;
     }
 
@@ -233,6 +253,8 @@ public class ReportParser
         GlucoseConcentration,
         FingerstickGlucoseConcentration,
         SensorInserted,
-        SensorStopped
+        SensorStopped,
+        AudioAlerts,
+        VibrateAlerts
     }
 }

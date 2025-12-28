@@ -50,8 +50,8 @@ namespace CamAPS.DataReader.Tests
             actual.FingerstickGlucoseConcentrations[0].Time.ToString(dateFormat).Should().Be("26/10/2025 15:31");
 
             // 26/09/2025 09:20
-            actual.SensorInsertedEvents.Count.Should().BeGreaterThan(0);
-            actual.SensorInsertedEvents[0].ToString(dateFormat).Should().Be("26/09/2025 09:20");
+            actual.SensorInsertions.Count.Should().BeGreaterThan(0);
+            actual.SensorInsertions[0].ToString(dateFormat).Should().Be("26/09/2025 09:20");
 
             // 26/09/2025 00:07
             actual.RefillEvents.Count.Should().BeGreaterThan(0);
@@ -62,8 +62,16 @@ namespace CamAPS.DataReader.Tests
             actual.PrimingEvents[0].ToString(dateFormat).Should().Be("26/09/2025 00:07");
 
             // 26/09/2025 00:07
-            actual.SensorStoppedEvents.Count.Should().Be(1);
-            actual.SensorStoppedEvents[0].ToString(dateFormat).Should().Be("26/09/2025 00:07");
+            actual.SensorStopps.Count.Should().Be(1);
+            actual.SensorStopps[0].ToString(dateFormat).Should().Be("26/09/2025 00:07");
+
+            // 26/09/2025 09:05
+            actual.AudioAlerts.Count.Should().BeGreaterThan(0);
+            actual.AudioAlerts[0].ToString(dateFormat).Should().Be("26/09/2025 09:05");
+
+            //14/12/2025 19:09
+            actual.VibrateAlerts.Count.Should().BeGreaterThan(0);
+            actual.VibrateAlerts[0].ToString(dateFormat).Should().Be("14/12/2025 19:09");
 
         }
 
