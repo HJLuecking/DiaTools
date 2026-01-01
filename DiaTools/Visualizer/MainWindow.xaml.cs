@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using CamAPS.DataReader;
 using Visualizer.ViewModels;
 
@@ -40,9 +39,9 @@ public partial class MainWindow : Window
             if (!File.Exists(candidate))
             {
                 StatusText.Text = $"Data file not found: {candidate}";
-                GlucosePlotView.Model = new OxyPlot.PlotModel { Title = "No data" };
-                InfusionsPlotView.Model = new OxyPlot.PlotModel { Title = "No data" };
-                BoliPlotView.Model = new OxyPlot.PlotModel { Title = "No data" };
+                GlucoseControl.DataContext = null;
+                InfusionsControl.DataContext = null;
+                BoliControl.DataContext = null;
                 return;
             }
 
@@ -53,15 +52,10 @@ public partial class MainWindow : Window
 
             StatusText.Text = $"ID: {report.Id}  •  Glucose points: {report.GlucoseConcentrations.Count}  •  Infusions: {report.InsulinInfusions.Count}  •  Boli: {report.InsulinBoli.Count}";
 
-            // Build and assign all three plots
-            var gvm = new GlucoseViewModel(report);
-            GlucosePlotView.Model = gvm.PlotModel;
-
-            var ivm = new InfusionsViewModel(report);
-            InfusionsPlotView.Model = ivm.PlotModel;
-
-            var bvm = new BoliViewModel(report);
-            BoliPlotView.Model = bvm.PlotModel;
+            // Assign DataContexts for embedded controls
+            GlucoseControl.DataContext = new GlucoseViewModel(report);
+            InfusionsControl.DataContext = new InfusionsViewModel(report);
+            BoliControl.DataContext = new BoliViewModel(report);
 
             // Default: show Glucose tab
             PlotTabControl.SelectedIndex = 0;
@@ -69,9 +63,9 @@ public partial class MainWindow : Window
         catch (Exception ex)
         {
             StatusText.Text = ex.Message;
-            GlucosePlotView.Model = new OxyPlot.PlotModel { Title = "Error" };
-            InfusionsPlotView.Model = new OxyPlot.PlotModel { Title = "Error" };
-            BoliPlotView.Model = new OxyPlot.PlotModel { Title = "Error" };
+            GlucoseControl.DataContext = null;
+            InfusionsControl.DataContext = null;
+            BoliControl.DataContext = null;
         }
     }
 }
