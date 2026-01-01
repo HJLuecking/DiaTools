@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using CamAPS.DataReader;
+using Visualizer.ViewModels;
 
 namespace Visualizer;
 public partial class MainWindow : Window
@@ -22,27 +23,6 @@ public partial class MainWindow : Window
         LoadAndRender();
     }
 
-    private void GlucoseButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (!_initialized || _currentReport == null) return;
-        var w = new GlucoseWindow(_currentReport) { Owner = this };
-        w.Show();
-    }
-
-    private void InfusionsButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (!_initialized || _currentReport == null) return;
-        var w = new InfusionsWindow(_currentReport) { Owner = this };
-        w.Show();
-    }
-
-    private void BoliButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (!_initialized || _currentReport == null) return;
-        var w = new BoliWindow(_currentReport) { Owner = this };
-        w.Show();
-    }
-
     private void LoadAndRender()
     {
         try
@@ -60,6 +40,9 @@ public partial class MainWindow : Window
             if (!File.Exists(candidate))
             {
                 StatusText.Text = $"Data file not found: {candidate}";
+                GlucosePlotView.Model = new OxyPlot.PlotModel { Title = "No data" };
+                InfusionsPlotView.Model = new OxyPlot.PlotModel { Title = "No data" };
+                BoliPlotView.Model = new OxyPlot.PlotModel { Title = "No data" };
                 return;
             }
 
@@ -69,10 +52,26 @@ public partial class MainWindow : Window
             _currentReport = report;
 
             StatusText.Text = $"ID: {report.Id}  •  Glucose points: {report.GlucoseConcentrations.Count}  •  Infusions: {report.InsulinInfusions.Count}  •  Boli: {report.InsulinBoli.Count}";
+
+            // Build and assign all three plots
+            var gvm = new GlucoseViewModel(report);
+            GlucosePlotView.Model = gvm.PlotModel;
+
+            var ivm = new InfusionsViewModel(report);
+            InfusionsPlotView.Model = ivm.PlotModel;
+
+            var bvm = new BoliViewModel(report);
+            BoliPlotView.Model = bvm.PlotModel;
+
+            // Default: show Glucose tab
+            PlotTabControl.SelectedIndex = 0;
         }
         catch (Exception ex)
         {
             StatusText.Text = ex.Message;
+            GlucosePlotView.Model = new OxyPlot.PlotModel { Title = "Error" };
+            InfusionsPlotView.Model = new OxyPlot.PlotModel { Title = "Error" };
+            BoliPlotView.Model = new OxyPlot.PlotModel { Title = "Error" };
         }
     }
 }

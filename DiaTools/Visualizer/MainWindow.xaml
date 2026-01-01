@@ -15,13 +15,6 @@
                 <StackPanel DockPanel.Dock="Top">
                     <TextBlock Text="Diagrams" FontWeight="Bold" Margin="0,0,0,8"/>
 
-                    <!-- Three buttons, one for each diagram -->
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-                        <Button x:Name="GlucoseButton" Content="Glucose Points" Click="GlucoseButton_Click" Margin="0,0,0,4" />
-                        <Button x:Name="InfusionsButton" Content="Insulin Infusions" Click="InfusionsButton_Click" Margin="0,0,0,4" />
-                        <Button x:Name="BoliButton" Content="Insulin Boli" Click="BoliButton_Click" />
-                    </StackPanel>
-
                     <StackPanel Margin="0,12,0,0">
                         <Button x:Name="ReloadButton" Content="Reload data" Click="ReloadButton_Click" />
                     </StackPanel>
@@ -38,7 +31,17 @@
 
         <!-- Diagram display area (scalable) -->
         <Border Grid.Column="1" Background="White" Padding="8">
-            <oxy:PlotView x:Name="PlotView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <TabControl x:Name="PlotTabControl">
+                <TabItem Header="Glucose">
+                    <oxy:PlotView x:Name="GlucosePlotView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                </TabItem>
+                <TabItem Header="Infusions">
+                    <oxy:PlotView x:Name="InfusionsPlotView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                </TabItem>
+                <TabItem Header="Boli">
+                    <oxy:PlotView x:Name="BoliPlotView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                </TabItem>
+            </TabControl>
         </Border>
     </Grid>
 </Window>

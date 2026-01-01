@@ -21,7 +21,7 @@ public class InfusionsViewModel : PlotViewModelBase
 
         var series = new ScatterSeries
         {
-            MarkerType = MarkerType.Star,
+            MarkerType = MarkerType.Triangle,
             MarkerSize = 3,
             MarkerFill = OxyPlot.OxyColors.Blue,
             Title = "Insulin infusion (U/h)"
