@@ -8,6 +8,6 @@ public partial class BoliWindow : Window
     public BoliWindow(ReportData report)
     {
         InitializeComponent();
-        DataContext = new PlotWindowViewModel(report, DiagramType.Boli);
+        DataContext = new BoliViewModel(report);
     }
 }

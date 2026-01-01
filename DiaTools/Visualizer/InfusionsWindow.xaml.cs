@@ -8,6 +8,6 @@ public partial class InfusionsWindow : Window
     public InfusionsWindow(ReportData report)
     {
         InitializeComponent();
-        DataContext = new PlotWindowViewModel(report, DiagramType.Infusions);
+        DataContext = new InfusionsViewModel(report);
     }
 }

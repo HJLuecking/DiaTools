@@ -8,6 +8,6 @@ public partial class GlucoseWindow : Window
     public GlucoseWindow(ReportData report)
     {
         InitializeComponent();
-        DataContext = new PlotWindowViewModel(report, DiagramType.Glucose);
+        DataContext = new GlucoseViewModel(report);
     }
 }
