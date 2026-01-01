@@ -22,7 +22,7 @@ public class GlucoseViewModel : PlotViewModelBase
         var series = new ScatterSeries
         {
             MarkerType = MarkerType.Circle,
-            MarkerSize = 3,
+            MarkerSize = 0.5,
             MarkerFill = OxyPlot.OxyColors.Red,
             Title = "Glucose (mg/dl)"
         };
