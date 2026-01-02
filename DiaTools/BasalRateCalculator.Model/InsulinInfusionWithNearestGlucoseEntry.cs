@@ -1,6 +1,6 @@
 namespace BasalRateCalculator.Model;
 
-public class InsulinInfusionWithGlucoseEntry
+public class InsulinInfusionWithNearestGlucoseEntry
 {
     public DateTime Time { get; set; }
 

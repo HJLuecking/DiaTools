@@ -21,8 +21,6 @@ public class ReportData
     public List<DateTime> SensorStopps { get; set; } = [];
     public List<DateTime> AudioAlerts { get; set; } = [];
     public List<DateTime> VibrateAlerts { get; set; } = [];
-
-    // New property: combined list matching each infusion to the nearest glucose value
     public List<InsulinInfusionWithGlucoseEntry> InsulinInfusionsWithGlucose { get; set; } = [];
 
     // Build/refresh the combined list. Uses nearest-time matching (minimum absolute time gap).
@@ -51,7 +49,7 @@ public class ReportData
                 Time = infusion.Time,
                 DateDiff = dateDiff,
                 UnitsPerHour = infusion.UnitsPerHour,
-                InsulinInfusionEntry = nearest.MgPerLitre
+                MgPerLitre = nearest.MgPerLitre
             });
         }
     }
