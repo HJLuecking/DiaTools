@@ -8,7 +8,6 @@ using OxyPlot.Legends;
 namespace Visualizer.ViewModels;
 public abstract class PlotViewModelBase : INotifyPropertyChanged
 {
-    protected const double MmolToMgDl = 18.0182;
     private PlotModel? _plotModel;
 
     public PlotModel? PlotModel

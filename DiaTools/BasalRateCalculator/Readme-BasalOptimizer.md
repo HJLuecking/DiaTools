@@ -10,7 +10,7 @@ Diese README beschreibt die Funktionsweise, Konfiguration und Nutzung der Klasse
 Aus Zeiten ohne aktiven Bolus und mit stabiler, im Zielbereich liegender Glukose repräsentative Basalraten pro Stunde des Tages ableiten.
 
 **Eingangsdaten**  
-- Glukosemessungen in **mmol/L** mit Zeitstempel  
+- Glukosemessungen in **mg/dl** mit Zeitstempel  
 - Basalprofil als Liste von Stufen mit Startzeit und `UnitsPerHour`  
 - Bolusereignisse mit Zeitstempel, `Units` und Dauer in Minuten
 
@@ -23,7 +23,7 @@ Aus Zeiten ohne aktiven Bolus und mit stabiler, im Zielbereich liegender Glukose
 
 ### 1. Rasteraufbau und Synchronisation
 - Erzeuge ein regelmäßiges Zeitraster mit `GridStep` (Standard 5 Minuten).  
-- Interpoliere Glukosewerte linear auf das Raster nach Umrechnung **mmol/L → mg/dl** (Faktor **18.0**).  
+- Interpoliere Glukosewerte linear auf das Raster nach Umrechnung **mg/dl → mg/dl** (Faktor **18.0**).  
 - Wende Basal als stufenförmiges Profil an: die zuletzt gültige Basalstufe gilt bis zur nächsten Änderung.  
 - Markiere Rasterpunkte als ausgeschlossen, wenn sie in einem Bolus‑Ausschlussintervall liegen, die Glukose außerhalb des Zielbereichs liegt oder die Glukose nicht interpolierbar ist.
 

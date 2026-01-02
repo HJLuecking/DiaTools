@@ -16,10 +16,8 @@ namespace BasalRateCalculator.Tests
 
             var parser = new ReportParser();
             var report = parser.Parse(lines);
-
-            // Convert GlucoseConcentrations (mmol/L) to DoubleTimeValue and Insulin boli to DoubleTimeValue
             var glucoseValues = report.GlucoseConcentrations
-                .Select(g => new DoubleTimeValue(g.Time, g.MMolPerLitre))
+                .Select(g => new DoubleTimeValue(g.Time, g.MgPerLitre))
                 .ToList();
 
             var basalValues = report.InsulinInfusions

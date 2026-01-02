@@ -9,16 +9,6 @@ namespace BasalRateCalculator.Tests
 {
     public class BasalOptimizerTests(ITestOutputHelper testOutputHelper)
     {
-        // Hilfsfunktion: erzeugt 5‑Minuten-Glukose-Werte mit konstantem mg/dl-Wert
-        private static IEnumerable<GlucoseConcentrationEntry> CreateGlucoseSeries(DateTime start, DateTime end, double mgPerDl)
-        {
-            var mmol = mgPerDl / 18.0;
-            for (var t = start; t < end; t = t.AddMinutes(5))
-            {
-                yield return new GlucoseConcentrationEntry { Time = t, MMolPerLitre = mmol };
-            }
-        }
-
         [Fact]
         public void ComputeOptimalBasal_NoBolus_StableGlucose_ReturnsBasalPerHour()
         {

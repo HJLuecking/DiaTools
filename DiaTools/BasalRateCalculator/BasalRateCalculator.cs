@@ -2,25 +2,24 @@
 
 public class BasalRateCalculator
 {
-    private const double MMolToMgDl = 18.0182;
     private const double MinGlucose = 90.0;
     private const double MaxGlucose = 150.0;
 
     /// <summary>
     /// Calculates the average hourly basal insulin rate based on provided glucose and insulin basal data.
     /// </summary>
-    /// <param name="glucoseValuesMMol">A list of glucose measurements, where each value represents a glucose
-    /// reading in mmol/L at a specific time.  Used to determine relevant time intervals for analysis.</param>
+    /// <param name="glucoseValuesMg">A list of glucose measurements, where each value represents a glucose
+    /// reading in mg/L at a specific time.  Used to determine relevant time intervals for analysis.</param>
     /// <param name="insulinBasal">A list of insulin basal entries, where each value represents an insulin dose
     /// administered at a specific  time. Only basales within the time range defined by the glucose values are
     /// considered.</param>
     /// <returns>A dictionary mapping each hour of the day (0–23) to the average basal insulin rate for that hour.
     /// If no data is available for a given hour, that hour will not appear in the dictionary.</returns>
     public BasalRateStatistics CollectBasalRateStatistics(
-        List<DoubleTimeValue> glucoseValuesMMol,
+        List<DoubleTimeValue> glucoseValuesMg,
         List<DoubleTimeValue> insulinBasal)
     {
-        var filteredGlucose = FilterGlucoseValuesAsMgDl(glucoseValuesMMol);
+        var filteredGlucose = FilterGlucoseValuesAsMgDl(glucoseValuesMg);
         var timeReferences = ExtractTimeReferences(filteredGlucose);
         var filteredBasal = FilterBasalByGlucoseTimesInRange(insulinBasal, timeReferences);
             
@@ -96,16 +95,16 @@ public class BasalRateCalculator
     }
 
     /// <summary>
-    /// Convert mmol/L glucose values to mg/dL, filter by acceptable range and sort by timestamp.
+    /// Filter by acceptable range and sort by timestamp.
     /// </summary>
-    /// <param name="glucoseValuesMMol"></param>
+    /// <param name="value"></param>
     /// <returns></returns>
-    private static List<DoubleTimeValue> FilterGlucoseValuesAsMgDl(List<DoubleTimeValue> glucoseValuesMMol)
+    private static List<DoubleTimeValue> FilterGlucoseValuesAsMgDl(List<DoubleTimeValue> value)
     {
-        var filteredGlucose = glucoseValuesMMol
+        var filteredGlucose = value
             .Select(g => new DoubleTimeValue(
                 g.Timestamp,
-                g.Value * MMolToMgDl))
+                g.Value))
             .Where(g => g.Value is >= MinGlucose and <= MaxGlucose)
             .OrderBy(g => g.Timestamp)
             .ToList();

@@ -31,7 +31,7 @@ public class GlucoseViewModel : PlotViewModelBase
         {
             var timeOfDay = baseDate.Date + g.Time.TimeOfDay;
             var x = DateTimeAxis.ToDouble(timeOfDay);
-            var y = g.MMolPerLitre * MmolToMgDl;
+            var y = g.MgPerLitre;
             if (double.IsNaN(y) || double.IsInfinity(y)) continue;
             series.Points.Add(new ScatterPoint(x, y));
         }

@@ -29,7 +29,7 @@ public class BasalOptimizer
 
     /// <summary>
     /// Baut ein gemeinsames Raster (z.B. 5-Minuten) zwischen start (inkl.) und end (exkl.).
-    /// Interpoliert Glukose (mmol/L -> mg/dl), wendet Basal als step function an und markiert Ausschlussintervalle.
+    /// IWendet Basal als step function an und markiert Ausschlussintervalle.
     /// </summary>
     public List<DataPoint> BuildUnifiedGrid(DateTime start, DateTime end)
     {
@@ -55,16 +55,13 @@ public class BasalOptimizer
 
         bool IsInExcludeIntervals(DateTime t) => excludeIntervals.Any(iv => iv.Start <= t && t < iv.End);
 
-        // Hilfsfunktion: Konvertiere mmol/L -> mg/dl
-        double MmolToMgDl(double mmol) => mmol * 18.0;
-
         // Interpolationsvorbereitung für Glukose (in mg/dl)
         Func<DateTime, double?> interpGlucoseMgDl = (DateTime t) =>
         {
             if (!glucose.Any()) return null;
             // exakter Messzeitpunkt?
             var exact = glucose.FirstOrDefault(g => g.Time == t);
-            if (exact != null) return MmolToMgDl(exact.MMolPerLitre);
+            if (exact != null) return exact.MgPerLitre;
 
             var right = glucose.FirstOrDefault(g => g.Time > t);
             var left = glucose.LastOrDefault(g => g.Time < t);
@@ -73,8 +70,8 @@ public class BasalOptimizer
             var gap = (right.Time - left.Time).TotalMinutes;
             if (gap > MaxInterpolationGapMinutes) return null;
 
-            var leftMg = MmolToMgDl(left.MMolPerLitre);
-            var rightMg = MmolToMgDl(right.MMolPerLitre);
+            var leftMg = left.MgPerLitre;
+            var rightMg = right.MgPerLitre;
             var frac = (t - left.Time).TotalSeconds / (right.Time - left.Time).TotalSeconds;
             return leftMg + frac * (rightMg - leftMg);
         };
