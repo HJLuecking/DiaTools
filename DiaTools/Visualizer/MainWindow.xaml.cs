@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using BasalRateCalculator.Model;
 using CamAPS.DataReader;
 using Visualizer.ViewModels;
 

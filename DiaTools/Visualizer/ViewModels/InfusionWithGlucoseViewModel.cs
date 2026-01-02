@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using BasalRateCalculator.Model;
 using CamAPS.DataReader;
 using OxyPlot;
 using OxyPlot.Series;
