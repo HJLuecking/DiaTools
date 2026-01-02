@@ -42,6 +42,9 @@
                 <TabItem Header="Boli">
                     <controls:BoliPlotControl x:Name="BoliControl"/>
                 </TabItem>
+                <TabItem Header="InsulinInfusionWithGlucose">
+                    <controls:InsulinInfusionWithGlucosePlotControl x:Name="InsulinInfusionWithGlucoseControl"/>
+                </TabItem>
             </TabControl>
         </Border>
     </Grid>
