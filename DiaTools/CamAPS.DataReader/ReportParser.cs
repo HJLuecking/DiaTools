@@ -60,6 +60,9 @@ public class ReportParser
             if (HandleFingerstickGlucoseConcentrationData(dataSection, parts, report)) continue;
         }
 
+        // build the combined list so callers get it populated automatically
+        report.BuildInsulinInfusionsWithGlucose();
+
         return report;
     }
 
