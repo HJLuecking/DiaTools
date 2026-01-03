@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace BasalRateCalculator.Model;
+namespace Diary.Model;
 
 public class ReportData
 {

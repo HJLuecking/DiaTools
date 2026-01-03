@@ -1,6 +1,4 @@
-using System;
-
-namespace BasalRateCalculator.Model;
+namespace Diary.Model;
 
 public class InsulinInfusionWithGlucoseEntry
 {

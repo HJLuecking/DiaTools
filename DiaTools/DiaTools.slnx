@@ -1,8 +1,9 @@
 <Solution>
-  <Project Path="BasalRateCalculator.Model/BasalRateCalculator.Model.csproj" Id="be1fd269-6720-45bf-ac66-f12e42653068" />
+  <Project Path="BasalRateCalculator.Model/Diary.Model.csproj" Id="be1fd269-6720-45bf-ac66-f12e42653068" />
   <Project Path="BasalRateCalculator.Tests/BasalRateCalculator.Tests.csproj" Id="f0bc2a9b-e05d-4b99-90af-0174386ce479" />
   <Project Path="BasalRateCalculator/BasalRateCalculator.csproj" Id="7d17217f-496a-4cf0-8026-34272dca30b9" />
   <Project Path="CamAPS.DataReader.Tests/CamAPS.DataReader.Tests.csproj" />
   <Project Path="CamAPS.DataReader/CamAPS.DataReader.csproj" />
+  <Project Path="Diary.Filter/Diary.Filter.csproj" Id="e5dd7a28-54d7-4f19-83a0-7905110553af" />
   <Project Path="Visualizer/Visualizer.csproj" Id="8f731645-4d43-4841-b747-d39f3a3552ca" />
 </Solution>

@@ -1,4 +1,4 @@
-﻿using BasalRateCalculator.Model;
+﻿using Diary.Model;
 
 namespace BasalRateCalculator;
 

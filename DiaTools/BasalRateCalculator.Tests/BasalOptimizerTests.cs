@@ -1,6 +1,5 @@
 ﻿// Namespace der BasalOptimizer-Implementierung
 
-using BasalRateCalculator.Model;
 using CamAPS.DataReader;
 using Xunit.Abstractions;
 using Xunit.Sdk;

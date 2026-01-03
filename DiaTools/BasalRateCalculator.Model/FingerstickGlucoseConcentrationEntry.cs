@@ -1,4 +1,4 @@
-﻿namespace BasalRateCalculator.Model;
+﻿namespace Diary.Model;
 
 public class FingerstickGlucoseConcentrationEntry
 {

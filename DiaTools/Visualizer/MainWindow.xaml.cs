@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
-using BasalRateCalculator.Model;
 using CamAPS.DataReader;
+using Diary.Model;
 using Visualizer.ViewModels;
 
 namespace Visualizer;
