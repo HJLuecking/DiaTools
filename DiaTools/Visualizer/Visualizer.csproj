@@ -14,10 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BasalRateCalculator.Model\BasalRateCalculator.Model.csproj" />
     <ProjectReference Include="..\BasalRateCalculator\BasalRateCalculator.csproj" />
     <ProjectReference Include="..\CamAPS.DataReader\CamAPS.DataReader.csproj" />
-    <ProjectReference Include="..\Diary.Filter\Diary.Filter.csproj" />
+    <ProjectReference Include="..\Diary.Filter\Diary.Aggregator.csproj" />
   </ItemGroup>
 
   <ItemGroup>

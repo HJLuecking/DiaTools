@@ -4,9 +4,9 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 
 namespace Visualizer.ViewModels;
-public class InfusionsViewModel : PlotViewModelBase
+public class InsulinInfusionsViewModel : PlotViewModelBase
 {
-    public InfusionsViewModel(ReportData report)
+    public InsulinInfusionsViewModel(ReportData report)
     {
         if (report is null) throw new ArgumentNullException(nameof(report));
         PlotModel = BuildInfusionsPlot(report);

@@ -57,7 +57,7 @@ public partial class MainWindow : Window
 
             // Assign DataContexts for embedded controls
             GlucoseControl.DataContext = new GlucoseViewModel(report);
-            InfusionsControl.DataContext = new InfusionsViewModel(report);
+            InfusionsControl.DataContext = new InsulinInfusionsViewModel(report);
             BoliControl.DataContext = new BoliViewModel(report);
             InsulinInfusionWithNearestGlucoseControl.DataContext = new InsulinInfusionWithNearestGlucoseViewModel(report);
             FilteredInsulinInfusionControl.DataContext = new FilteredInsulinInfusionViewModel(report);

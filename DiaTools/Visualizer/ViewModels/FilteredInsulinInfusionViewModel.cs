@@ -1,4 +1,4 @@
-using Diary.Filter;
+using Diary.Aggregator;
 using Diary.Model;
 using OxyPlot;
 using OxyPlot.Series;

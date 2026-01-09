@@ -1,59 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Diary.Model;
+﻿using Diary.Model;
 
-namespace Diary.Filter
+namespace Diary.Aggregator
 {
     public static class GlucoseFilter
     {
-        /// <summary>
-        /// Filters the provided infusion-with-glucose entries keeping only those whose matched glucose value
-        /// is between <paramref name="minimumGlucose"/> and <paramref name="maximumGlucose"/> (inclusive).
-        /// </summary>
         /// <param name="items">Source list of <see cref="InsulinInfusionWithNearestGlucoseEntry"/>.</param>
-        /// <param name="minimumGlucose">Lower glucose bound (mg/dL).</param>
-        /// <param name="maximumGlucose">Upper glucose bound (mg/dL).</param>
-        /// <returns>New list containing entries with glucose in the requested range.</returns>
-        /// <exception cref="ArgumentException">Thrown when MinimumGlucose &gt; MaximumGlucose.</exception>
-        public static List<InsulinInfusionWithNearestGlucoseEntry> FilterByMinimumAndMaximumGlucose(
-            this IEnumerable<InsulinInfusionWithNearestGlucoseEntry>? items,
-            double minimumGlucose,
-            double maximumGlucose)
+        extension(IEnumerable<InsulinInfusionWithNearestGlucoseEntry>? items)
         {
-            if (minimumGlucose > maximumGlucose)
-                throw new ArgumentException($"{nameof(minimumGlucose)} must be less than or equal to {nameof(maximumGlucose)}.");
+            /// <summary>
+            /// Filters the provided infusion-with-glucose entries keeping only those whose matched glucose value
+            /// is between <paramref name="minimumGlucose"/> and <paramref name="maximumGlucose"/> (inclusive).
+            /// </summary>
+            /// <param name="minimumGlucose">Lower glucose bound (mg/dL).</param>
+            /// <param name="maximumGlucose">Upper glucose bound (mg/dL).</param>
+            /// <returns>New list containing entries with glucose in the requested range.</returns>
+            /// <exception cref="ArgumentException">Thrown when MinimumGlucose &gt; MaximumGlucose.</exception>
+            public List<InsulinInfusionWithNearestGlucoseEntry> FilterByMinimumAndMaximumGlucose(double minimumGlucose,
+                double maximumGlucose)
+            {
+                if (minimumGlucose > maximumGlucose)
+                    throw new ArgumentException($"{nameof(minimumGlucose)} must be less than or equal to {nameof(maximumGlucose)}.");
 
-            if (items == null) return [];
+                if (items == null) return [];
 
-            return items
-                .Where(entry => !double.IsNaN(entry.GlucoseMgPerLitre)
-                            && entry.GlucoseMgPerLitre >= minimumGlucose
-                            && entry.GlucoseMgPerLitre <= maximumGlucose)
-                .ToList();
-        }
+                return items
+                    .Where(entry => !double.IsNaN(entry.GlucoseMgPerLitre)
+                                    && entry.GlucoseMgPerLitre >= minimumGlucose
+                                    && entry.GlucoseMgPerLitre <= maximumGlucose)
+                    .ToList();
+            }
 
-        /// <summary>
-        /// Filters the provided infusion-with-glucose entries keeping only those whose absolute time difference
-        /// between infusion and matched glucose is less than or equal to <paramref name="maximumTimeDiff"/>.
-        /// </summary>
-        /// <param name="items">Source list of <see cref="InsulinInfusionWithNearestGlucoseEntry"/>.</param>
-        /// <param name="minutes">Maximum allowed absolute time difference (minutes).</param>
-        /// <returns>New list containing entries with |TimeDiff| &lt;= maximumTimeDiff.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="minutes"/> is negative.</exception>
-        public static List<InsulinInfusionWithNearestGlucoseEntry> FilterByMaximumTimeDiff(
-            this IEnumerable<InsulinInfusionWithNearestGlucoseEntry>? items,
-            int minutes)
-        {
-            if (minutes < 0)
-                throw new ArgumentException($"{nameof(minutes)} must be non-negative.");
-            var maximumTimeDiff = TimeSpan.FromMinutes(minutes);
+            /// <summary>
+            /// Filters the provided infusion-with-glucose entries keeping only those whose absolute time difference
+            /// between infusion and matched glucose is less than or equal to <paramref name="minutes"/>.
+            /// </summary>
+            /// <param name="minutes">Maximum allowed absolute time difference (minutes).</param>
+            /// <returns>New list containing entries with |TimeDiff| &lt;= maximumTimeDiff.</returns>
+            /// <exception cref="ArgumentException">Thrown when <paramref name="minutes"/> is negative.</exception>
+            public List<InsulinInfusionWithNearestGlucoseEntry> FilterByMaximumTimeDiff(int minutes)
+            {
+                if (minutes < 0)
+                    throw new ArgumentException($"{nameof(minutes)} must be non-negative.");
+                var maximumTimeDiff = TimeSpan.FromMinutes(minutes);
 
-            if (items == null) return [];
+                if (items == null) return [];
 
-            return items
-                .Where(e => e.TimeDiff.Duration() <= maximumTimeDiff)
-                .ToList();
+                return items
+                    .Where(e => e.TimeDiff.Duration() <= maximumTimeDiff)
+                    .ToList();
+            }
         }
 
         /// <summary>

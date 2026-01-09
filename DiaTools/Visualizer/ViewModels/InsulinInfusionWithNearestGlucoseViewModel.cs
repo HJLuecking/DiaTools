@@ -22,13 +22,13 @@ public class InsulinInfusionWithNearestGlucoseViewModel : PlotViewModelBase
             MarkerType = MarkerType.Circle,
             MarkerSize = 1,
             MarkerFill = OxyPlot.OxyColors.Blue,
-            Title = "Glucose mg/dl)"
+            Title = "Insulin units per hour)"
         };
 
         foreach (var i in report.InsulinInfusionWithNearestGlucose.OrderBy(i => i.Time))
         {
             var t = baseDate.Date + i.Time.TimeOfDay;
-            series.Points.Add(new ScatterPoint(DateTimeAxis.ToDouble(t), i.GlucoseMgPerLitre));
+            series.Points.Add(new ScatterPoint(DateTimeAxis.ToDouble(t), i.InsulinUnitsPerHour));
         }
 
         plot.Series.Add(series);
