@@ -212,7 +212,7 @@ public class ReportParser
     {
         if (dataSection != DataSection.SensorStopped) return false;
         var time = ParseDateTime(parts);
-        reportData.SensorStopps.Add(time);
+        reportData.SensorStops.Add(time);
         return true;
     }
 

@@ -1,9 +1,11 @@
-    using System;
-using System.ComponentModel;
-using System.Linq;
+using Diary.Model;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Legends;
+using OxyPlot.Series;
+    using System;
+using System.ComponentModel;
+using System.Linq;
 
 namespace Visualizer.ViewModels;
 public abstract class PlotViewModelBase : INotifyPropertyChanged

@@ -5,25 +5,25 @@ public class ReportData
     public string Id { get; set; } = string.Empty;
     public int LinesRead { get; set; }
 
-    public List<MealEntry> Meals { get; set; } = new List<MealEntry>();
-    public List<DateTime> PrimingEvents { get; set; } = new List<DateTime>();
-    public List<DateTime> RefillEvents { get; set; } = new List<DateTime>();
-    public List<InsulinBolusEntry> InsulinBoli { get; set; } = new List<InsulinBolusEntry>();
-    public List<InsulinInfusionEntry> InsulinInfusions { get; set; } = new List<InsulinInfusionEntry>();
-    public List<GlucoseConcentrationEntry> GlucoseConcentrations { get; set; } = new List<GlucoseConcentrationEntry>();
-    public List<FingerstickGlucoseConcentrationEntry> FingerstickGlucoseConcentrations { get; set; } = new List<FingerstickGlucoseConcentrationEntry>();
-    public List<DateTime> SensorInsertions { get; set; } = new List<DateTime>();
-    public List<DateTime> SensorStopps { get; set; } = new List<DateTime>();
-    public List<DateTime> AudioAlerts { get; set; } = new List<DateTime>();
-    public List<DateTime> VibrateAlerts { get; set; } = new List<DateTime>();
+    public List<MealEntry> Meals { get; set; } = [];
+    public List<DateTime> PrimingEvents { get; set; } = [];
+    public List<DateTime> RefillEvents { get; set; } = [];
+    public List<InsulinBolusEntry> InsulinBoli { get; set; } = [];
+    public List<InsulinInfusionEntry> InsulinInfusions { get; set; } = [];
+    public List<GlucoseConcentrationEntry> GlucoseConcentrations { get; set; } = [];
+    public List<FingerstickGlucoseConcentrationEntry> FingerstickGlucoseConcentrations { get; set; } = [];
+    public List<DateTime> SensorInsertions { get; set; } = [];
+    public List<DateTime> SensorStops { get; set; } = [];
+    public List<DateTime> AudioAlerts { get; set; } = [];
+    public List<DateTime> VibrateAlerts { get; set; } = [];
 
     // Combined list: each infusion matched to the nearest glucose reading
-    public List<InsulinInfusionWithGlucoseEntry> InsulinInfusionsWithGlucose { get; set; } = new List<InsulinInfusionWithGlucoseEntry>();
+    public List<InsulinInfusionWithNearestGlucoseEntry> InsulinInfusionWithNearestGlucose { get; set; } = [];
 
     // Build/refresh the combined list. Uses nearest-time matching (minimum absolute time gap).
     public void BuildInsulinInfusionsWithGlucose()
     {
-        InsulinInfusionsWithGlucose = new List<InsulinInfusionWithGlucoseEntry>();
+        InsulinInfusionWithNearestGlucose = [];
 
         if (!InsulinInfusions.Any() || !GlucoseConcentrations.Any()) return;
 
@@ -37,14 +37,14 @@ public class ReportData
 
             if (nearest == null) continue;
 
-            var dateDiff = infusion.Time - nearest.Time; // signed difference
+            var timeDiff = infusion.Time - nearest.Time; // signed difference
 
-            InsulinInfusionsWithGlucose.Add(new InsulinInfusionWithGlucoseEntry
+            InsulinInfusionWithNearestGlucose.Add(new InsulinInfusionWithNearestGlucoseEntry
             {
                 Time = infusion.Time,
-                DateDiff = dateDiff,
-                UnitsPerHour = infusion.UnitsPerHour,
-                MgPerLitre = nearest.MMolPerLitre * 18.0 // ensure mg/dL stored; adjust if your GlucoseEntry already exposes mg/dL
+                TimeDiff = timeDiff,
+                InsulinUnitsPerHour = infusion.UnitsPerHour,
+                GlucoseMgPerLitre = nearest.MMolPerLitre * 18.0 // ensure mg/dL stored; adjust if your GlucoseEntry already exposes mg/dL
             });
         }
     }

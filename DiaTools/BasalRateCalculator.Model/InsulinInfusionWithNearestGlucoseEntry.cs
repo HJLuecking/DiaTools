@@ -5,10 +5,11 @@ public class InsulinInfusionWithNearestGlucoseEntry
     public DateTime Time { get; set; }
 
     // Difference between infusion time and matched glucose time (infusion.Time - glucose.Time)
-    public TimeSpan DateDiff { get; set; }
+    public TimeSpan TimeDiff { get; set; }
 
-    public double UnitsPerHour { get; set; }
+    // Value taken from the matched InsulinInfusionEntry 
+    public double InsulinUnitsPerHour { get; set; }
 
-    // Value taken from the matched GlucoseConcentrationEntry (MgPerLitre chosen here)
-    public double InsulinInfusionEntry { get; set; }
+    // Value taken from the matched GlucoseConcentrationEntry 
+    public double GlucoseMgPerLitre { get; set; }
 }

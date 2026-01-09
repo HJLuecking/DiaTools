@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BasalRateCalculator.Model\Diary.Model.csproj" />
+  </ItemGroup>
+
 </Project>

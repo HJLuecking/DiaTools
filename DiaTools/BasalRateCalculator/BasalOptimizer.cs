@@ -45,7 +45,7 @@ public class BasalOptimizer
         var excludeIntervals = boluses
             .Select(b =>
             {
-                var dur = TimeSpan.FromMinutes(Math.Max(b.Minutes, 0));
+                var dur = TimeSpan.FromMinutes(Math.Max(20, 0));
                 var endByDuration = b.Time + dur;
                 var endByAfter = b.Time + ExcludeAfterBolus;
                 var end = endByDuration > endByAfter ? endByDuration : endByAfter;

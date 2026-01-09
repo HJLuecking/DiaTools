@@ -7,9 +7,9 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 
 namespace Visualizer.ViewModels;
-public class InfusionWithGlucoseViewModel : PlotViewModelBase
+public class FilteredInfusionWithGlucoseViewModel : PlotViewModelBase
 {
-    public InfusionWithGlucoseViewModel(ReportData report)
+    public FilteredInfusionWithGlucoseViewModel(ReportData report)
     {
         if (report is null) throw new ArgumentNullException(nameof(report));
         PlotModel = BuildInfusionsPlot(report);

@@ -62,8 +62,8 @@ namespace CamAPS.DataReader.Tests
             actual.PrimingEvents[0].ToString(dateFormat).Should().Be("26/09/2025 00:07");
 
             // 26/09/2025 00:07
-            actual.SensorStopps.Count.Should().Be(1);
-            actual.SensorStopps[0].ToString(dateFormat).Should().Be("26/09/2025 00:07");
+            actual.SensorStops.Count.Should().Be(1);
+            actual.SensorStops[0].ToString(dateFormat).Should().Be("26/09/2025 00:07");
 
             // 26/09/2025 09:05
             actual.AudioAlerts.Count.Should().BeGreaterThan(0);
