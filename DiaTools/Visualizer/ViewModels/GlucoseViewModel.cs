@@ -1,10 +1,7 @@
-using System;
-using CamAPS.DataReader;
 using Diary.Model;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Axes;
-using OxyPlot;
 
 namespace Visualizer.ViewModels;
 public class GlucoseViewModel : PlotViewModelBase

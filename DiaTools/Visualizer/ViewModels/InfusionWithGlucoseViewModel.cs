@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using CamAPS.DataReader;
 using Diary.Model;
 using OxyPlot;
 using OxyPlot.Series;
