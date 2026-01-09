@@ -48,6 +48,9 @@
                 <TabItem Header="FilteredInsulinInfusion">
                     <controls:FilteredInsulinInfusionPlotControl x:Name="FilteredInsulinInfusionControl"/>
                 </TabItem>
+                <TabItem Header="AverageInsulinPerHour">
+                    <controls:AverageInsulinPerHourPlotControl x:Name="AverageInsulinPerHourControl"/>
+                </TabItem>
             </TabControl>
         </Border>
     </Grid>

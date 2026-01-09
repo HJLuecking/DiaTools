@@ -4,8 +4,8 @@ namespace Diary.Aggregator
 {
     public static class GlucoseFilter
     {
-        /// <param name="items">Source list of <see cref="InsulinInfusionWithNearestGlucoseEntry"/>.</param>
-        extension(IEnumerable<InsulinInfusionWithNearestGlucoseEntry>? items)
+        /// <param name="items">Source list of <see cref="InsulinInfusionGlucoseEntry"/>.</param>
+        extension(IEnumerable<InsulinInfusionGlucoseEntry>? items)
         {
             /// <summary>
             /// Filters the provided infusion-with-glucose entries keeping only those whose matched glucose value
@@ -15,7 +15,7 @@ namespace Diary.Aggregator
             /// <param name="maximumGlucose">Upper glucose bound (mg/dL).</param>
             /// <returns>New list containing entries with glucose in the requested range.</returns>
             /// <exception cref="ArgumentException">Thrown when MinimumGlucose &gt; MaximumGlucose.</exception>
-            public List<InsulinInfusionWithNearestGlucoseEntry> FilterByMinimumAndMaximumGlucose(double minimumGlucose,
+            public List<InsulinInfusionGlucoseEntry> FilterByMinimumAndMaximumGlucose(double minimumGlucose,
                 double maximumGlucose)
             {
                 if (minimumGlucose > maximumGlucose)
@@ -37,7 +37,7 @@ namespace Diary.Aggregator
             /// <param name="minutes">Maximum allowed absolute time difference (minutes).</param>
             /// <returns>New list containing entries with |TimeDiff| &lt;= maximumTimeDiff.</returns>
             /// <exception cref="ArgumentException">Thrown when <paramref name="minutes"/> is negative.</exception>
-            public List<InsulinInfusionWithNearestGlucoseEntry> FilterByMaximumTimeDiff(int minutes)
+            public List<InsulinInfusionGlucoseEntry> FilterByMaximumTimeDiff(int minutes)
             {
                 if (minutes < 0)
                     throw new ArgumentException($"{nameof(minutes)} must be non-negative.");
@@ -55,17 +55,19 @@ namespace Diary.Aggregator
         /// Excludes infusion-with-glucose entries that fall into any bolus exclusion interval.
         /// For each bolus the exclusion interval is from bolus.Time to max(bolus.Time + Minutes, bolus.Time + ExcludeAfterBolus).
         /// </summary>
-        /// <param name="glucoseEntries">Source list of <see cref="InsulinInfusionWithNearestGlucoseEntry"/>.</param>
+        /// <param name="glucoseEntries">Source list of <see cref="InsulinInfusionGlucoseEntry"/>.</param>
         /// <param name="insulinBoli">List of bolus events (maybe null or empty).</param>
         /// <param name="excludeMinutesAfterBolus">Exclusion timespan in minutes after bolus</param>
         /// <returns>Filtered list excluding entries within bolus exclusion intervals.</returns>
-        public static List<InsulinInfusionWithNearestGlucoseEntry> FilterTimeSpanAfterBolus(
-            this List<InsulinInfusionWithNearestGlucoseEntry>? glucoseEntries,
+        public static List<InsulinInfusionGlucoseEntry> FilterTimeSpanAfterBolus(
+            this List<InsulinInfusionGlucoseEntry>? glucoseEntries,
             List<InsulinBolusEntry>? insulinBoli,
             int excludeMinutesAfterBolus)
         {
             if (glucoseEntries == null) return [];
-            if (insulinBoli == null || insulinBoli.Count==0) return glucoseEntries.ToList();
+            if (excludeMinutesAfterBolus <= 0 || 
+                insulinBoli == null || 
+                insulinBoli.Count==0) return glucoseEntries.ToList();
 
             // Build exclusion intervals from boluses
             var excludeIntervals = insulinBoli

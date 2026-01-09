@@ -4,7 +4,7 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 
 namespace Visualizer.ViewModels;
-public class GlucoseViewModel : PlotViewModelBase
+public class GlucoseViewModel : PlotViewModelBaseByTime
 {
     public GlucoseViewModel(ReportData report)
     {

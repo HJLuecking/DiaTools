@@ -10,15 +10,15 @@ public class ReportData
     public List<DateTime> RefillEvents { get; set; } = [];
     public List<InsulinBolusEntry> InsulinBoli { get; set; } = [];
     public List<InsulinInfusionEntry> InsulinInfusions { get; set; } = [];
-    public List<GlucoseConcentrationEntry> GlucoseConcentrations { get; set; } = [];
-    public List<FingerstickGlucoseConcentrationEntry> FingerstickGlucoseConcentrations { get; set; } = [];
+    public List<GlucoseEntry> GlucoseConcentrations { get; set; } = [];
+    public List<FingerstickGlucoseEntry> FingerstickGlucoseConcentrations { get; set; } = [];
     public List<DateTime> SensorInsertions { get; set; } = [];
     public List<DateTime> SensorStops { get; set; } = [];
     public List<DateTime> AudioAlerts { get; set; } = [];
     public List<DateTime> VibrateAlerts { get; set; } = [];
 
     // Combined list: each infusion matched to the nearest glucose reading
-    public List<InsulinInfusionWithNearestGlucoseEntry> InsulinInfusionWithNearestGlucose { get; set; } = [];
+    public List<InsulinInfusionGlucoseEntry> InsulinInfusionWithNearestGlucose { get; set; } = [];
 
     // Build/refresh the combined list. Uses nearest-time matching (minimum absolute time gap).
     public void BuildInsulinInfusionsWithGlucose()
@@ -39,7 +39,7 @@ public class ReportData
 
             var timeDiff = infusion.Time - nearest.Time; // signed difference
 
-            InsulinInfusionWithNearestGlucose.Add(new InsulinInfusionWithNearestGlucoseEntry
+            InsulinInfusionWithNearestGlucose.Add(new InsulinInfusionGlucoseEntry
             {
                 Time = infusion.Time,
                 TimeDiff = timeDiff,

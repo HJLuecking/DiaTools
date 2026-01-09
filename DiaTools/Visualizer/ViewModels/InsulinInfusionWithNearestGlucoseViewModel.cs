@@ -4,7 +4,7 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 
 namespace Visualizer.ViewModels;
-public class InsulinInfusionWithNearestGlucoseViewModel : PlotViewModelBase
+public class InsulinInfusionWithNearestGlucoseViewModel : PlotViewModelBaseByTime
 {
     public InsulinInfusionWithNearestGlucoseViewModel(ReportData report)
     {

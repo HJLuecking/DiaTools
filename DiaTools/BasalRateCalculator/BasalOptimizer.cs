@@ -15,7 +15,7 @@ public class BasalOptimizer
     public bool ApplySmoothing { get; set; } = true; // 3-stündiger gleitender Mittelwert
 
     // Rohdaten
-    private readonly List<GlucoseConcentrationEntry> _glucose = new List<GlucoseConcentrationEntry>();
+    private readonly List<GlucoseEntry> _glucose = new List<GlucoseEntry>();
     private readonly List<InsulinInfusionEntry> _basal = new List<InsulinInfusionEntry>();
     private readonly List<InsulinBolusEntry> _boluses = new List<InsulinBolusEntry>();
 
@@ -23,7 +23,7 @@ public class BasalOptimizer
     private List<DataPoint> _gridPoints = new List<DataPoint>();
 
     // Public API zum Hinzufügen von Rohdaten
-    public void AddGlucoseEntries(IEnumerable<GlucoseConcentrationEntry> entries) => _glucose.AddRange(entries);
+    public void AddGlucoseEntries(IEnumerable<GlucoseEntry> entries) => _glucose.AddRange(entries);
     public void AddBasalEntries(IEnumerable<InsulinInfusionEntry> entries) => _basal.AddRange(entries);
     public void AddBolusEntries(IEnumerable<InsulinBolusEntry> entries) => _boluses.AddRange(entries);
 

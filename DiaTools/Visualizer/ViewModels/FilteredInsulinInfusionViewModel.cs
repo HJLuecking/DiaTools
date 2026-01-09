@@ -5,7 +5,7 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 
 namespace Visualizer.ViewModels;
-public class FilteredInsulinInfusionViewModel : PlotViewModelBase
+public class FilteredInsulinInfusionViewModel : PlotViewModelBaseByTime
 {
     public FilteredInsulinInfusionViewModel(ReportData report)
     {

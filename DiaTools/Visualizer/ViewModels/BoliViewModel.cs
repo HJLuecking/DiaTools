@@ -6,7 +6,7 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 
 namespace Visualizer.ViewModels;
-public class BoliViewModel : PlotViewModelBase
+public class BoliViewModel : PlotViewModelBaseByTime
 {
     public BoliViewModel(ReportData report)
     {

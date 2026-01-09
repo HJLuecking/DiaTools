@@ -1,6 +1,7 @@
 ﻿namespace Diary.Model;
 
-public class FingerstickGlucoseConcentrationEntry
+
+public class GlucoseEntry
 {
     public DateTime Time { get; set; }
 

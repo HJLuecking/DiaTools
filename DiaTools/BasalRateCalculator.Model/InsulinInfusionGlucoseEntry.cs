@@ -1,6 +1,6 @@
 namespace Diary.Model;
 
-public class InsulinInfusionWithNearestGlucoseEntry
+public class InsulinInfusionGlucoseEntry
 {
     public DateTime Time { get; set; }
 
@@ -10,6 +10,6 @@ public class InsulinInfusionWithNearestGlucoseEntry
     // Value taken from the matched InsulinInfusionEntry 
     public double InsulinUnitsPerHour { get; set; }
 
-    // Value taken from the matched GlucoseConcentrationEntry 
+    // Value taken from the matched GlucoseEntry 
     public double GlucoseMgPerLitre { get; set; }
 }

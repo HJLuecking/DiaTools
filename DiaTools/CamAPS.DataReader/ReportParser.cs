@@ -104,7 +104,7 @@ public class ReportParser
         if (dataSection != DataSection.FingerstickGlucoseConcentration) return false;
         if (parts.Length == 4)
         {
-            reportData.FingerstickGlucoseConcentrations.Add(new FingerstickGlucoseConcentrationEntry
+            reportData.FingerstickGlucoseConcentrations.Add(new FingerstickGlucoseEntry
             {
                 Time = ParseDateTime(parts),
                 MMolPerLitre = ParseDouble(parts[2])
@@ -120,7 +120,7 @@ public class ReportParser
 
         if (parts.Length == 3)
         {
-            reportData.GlucoseConcentrations.Add(new GlucoseConcentrationEntry
+            reportData.GlucoseConcentrations.Add(new GlucoseEntry
             {
                 Time = ParseDateTime(parts),
                 MMolPerLitre = ParseDouble(parts[2])

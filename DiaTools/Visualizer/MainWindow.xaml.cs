@@ -45,6 +45,7 @@ public partial class MainWindow : Window
                 BoliControl.DataContext = null;
                 InsulinInfusionWithNearestGlucoseControl = null;
                 FilteredInsulinInfusionControl = null;
+                AverageInsulinPerHourControl = null;
                 return;
             }
 
@@ -61,6 +62,7 @@ public partial class MainWindow : Window
             BoliControl.DataContext = new BoliViewModel(report);
             InsulinInfusionWithNearestGlucoseControl.DataContext = new InsulinInfusionWithNearestGlucoseViewModel(report);
             FilteredInsulinInfusionControl.DataContext = new FilteredInsulinInfusionViewModel(report);
+            AverageInsulinPerHourControl.DataContext = new AverageInsulinPerHourViewModel(report);
 
             // Default: show Glucose tab
             PlotTabControl.SelectedIndex = 0;
@@ -73,6 +75,7 @@ public partial class MainWindow : Window
             BoliControl.DataContext = null;
             InsulinInfusionWithNearestGlucoseControl = null;
             FilteredInsulinInfusionControl = null;
+            AverageInsulinPerHourControl = null;
         }
     }
 }

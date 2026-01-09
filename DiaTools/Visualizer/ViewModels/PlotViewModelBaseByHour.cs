@@ -4,7 +4,7 @@ using OxyPlot.Legends;
 using System.ComponentModel;
 
 namespace Visualizer.ViewModels;
-public abstract class PlotViewModelBase : INotifyPropertyChanged
+public abstract class PlotViewModelBaseByHour : INotifyPropertyChanged
 {
     private PlotModel? _plotModel;
 
@@ -21,21 +21,24 @@ public abstract class PlotViewModelBase : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    protected PlotModel BuildCommonTimeModel(string title)
+    protected PlotModel BuildCommonHourModel(string title)
     {
         var plot = new PlotModel { Title = title };
 
-        var timeAxis = new DateTimeAxis
+        var linearAxis = new LinearAxis
         {
+            Title = "Hour",
             Position = AxisPosition.Bottom,
-            StringFormat = "HH:mm",
-            Title = "Time",
-            IntervalType = DateTimeIntervalType.Hours,
-            MinorIntervalType = DateTimeIntervalType.Minutes,
+            Minimum = 0,
+            Maximum = 24,
+            MajorStep = 1,
+            MinorStep = 1,
+            StringFormat = "0",
             IsZoomEnabled = true,
             IsPanEnabled = true
         };
-        plot.Axes.Add(timeAxis);
+
+        plot.Axes.Add(linearAxis);
 
         var yAxis = new LinearAxis
         {
