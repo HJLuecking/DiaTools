@@ -43,7 +43,8 @@ public partial class MainWindow : Window
                 GlucoseControl.DataContext = null;
                 InfusionsControl.DataContext = null;
                 BoliControl.DataContext = null;
-                InsulinInfusionWithGlucoseControl=null;
+                InsulinInfusionWithNearestGlucoseControl = null;
+                FilteredInsulinInfusionControl = null;
                 return;
             }
 
@@ -58,7 +59,8 @@ public partial class MainWindow : Window
             GlucoseControl.DataContext = new GlucoseViewModel(report);
             InfusionsControl.DataContext = new InfusionsViewModel(report);
             BoliControl.DataContext = new BoliViewModel(report);
-            InsulinInfusionWithGlucoseControl.DataContext = new InfusionWithGlucoseViewModel(report);
+            InsulinInfusionWithNearestGlucoseControl.DataContext = new InsulinInfusionWithNearestGlucoseViewModel(report);
+            FilteredInsulinInfusionControl.DataContext = new FilteredInsulinInfusionViewModel(report);
 
             // Default: show Glucose tab
             PlotTabControl.SelectedIndex = 0;
@@ -69,7 +71,8 @@ public partial class MainWindow : Window
             GlucoseControl.DataContext = null;
             InfusionsControl.DataContext = null;
             BoliControl.DataContext = null;
-            InsulinInfusionWithGlucoseControl = null;
+            InsulinInfusionWithNearestGlucoseControl = null;
+            FilteredInsulinInfusionControl = null;
         }
     }
 }

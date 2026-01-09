@@ -4,9 +4,9 @@ using OxyPlot.Series;
 using OxyPlot.Axes;
 
 namespace Visualizer.ViewModels;
-public class InfusionWithGlucoseViewModel : PlotViewModelBase
+public class InsulinInfusionWithNearestGlucoseViewModel : PlotViewModelBase
 {
-    public InfusionWithGlucoseViewModel(ReportData report)
+    public InsulinInfusionWithNearestGlucoseViewModel(ReportData report)
     {
         if (report is null) throw new ArgumentNullException(nameof(report));
         PlotModel = BuildInfusionsPlot(report);
@@ -22,7 +22,7 @@ public class InfusionWithGlucoseViewModel : PlotViewModelBase
             MarkerType = MarkerType.Circle,
             MarkerSize = 1,
             MarkerFill = OxyPlot.OxyColors.Blue,
-            Title = "Insulin infusion (U/h)"
+            Title = "Glucose mg/dl)"
         };
 
         foreach (var i in report.InsulinInfusionWithNearestGlucose.OrderBy(i => i.Time))

@@ -1,12 +1,13 @@
+using Diary.Filter;
 using Diary.Model;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Axes;
 
 namespace Visualizer.ViewModels;
-public class FilteredInfusionWithGlucoseViewModel : PlotViewModelBase
+public class FilteredInsulinInfusionViewModel : PlotViewModelBase
 {
-    public FilteredInfusionWithGlucoseViewModel(ReportData report)
+    public FilteredInsulinInfusionViewModel(ReportData report)
     {
         if (report is null) throw new ArgumentNullException(nameof(report));
         PlotModel = BuildInfusionsPlot(report);
@@ -15,20 +16,25 @@ public class FilteredInfusionWithGlucoseViewModel : PlotViewModelBase
     private PlotModel BuildInfusionsPlot(ReportData report)
     {
         var baseDate = new DateTime(2000, 1, 1);
-        var plot = BuildCommonTimeModel("Insulin Infusions with Glucose");
+        var plot = BuildCommonTimeModel("Filtered Insulin Infusions");
 
         var series = new ScatterSeries
         {
             MarkerType = MarkerType.Circle,
             MarkerSize = 1,
             MarkerFill = OxyPlot.OxyColors.Blue,
-            Title = "Insulin infusion (U/h)"
+            Title = "Insulin per hour"
         };
 
-        foreach (var i in report.InsulinInfusionWithNearestGlucose.OrderBy(i => i.Time))
+        var filteredData = report.InsulinInfusionWithNearestGlucose
+            .FilterByMaximumTimeDiff(30)
+            .FilterByMinimumAndMaximumGlucose(80, 150)
+            .FilterTimeSpanAfterBolus(report.InsulinBoli, 240);
+
+        foreach (var i in filteredData.OrderBy(i => i.Time))
         {
             var t = baseDate.Date + i.Time.TimeOfDay;
-            series.Points.Add(new ScatterPoint(DateTimeAxis.ToDouble(t), i.GlucoseMgPerLitre));
+            series.Points.Add(new ScatterPoint(DateTimeAxis.ToDouble(t), i.InsulinUnitsPerHour));
         }
 
         plot.Series.Add(series);

@@ -5,7 +5,7 @@ using Diary.Model;
 
 namespace Diary.Filter
 {
-    public class GlucoseFilter
+    public static class GlucoseFilter
     {
         /// <summary>
         /// Filters the provided infusion-with-glucose entries keeping only those whose matched glucose value
@@ -17,7 +17,7 @@ namespace Diary.Filter
         /// <returns>New list containing entries with glucose in the requested range.</returns>
         /// <exception cref="ArgumentException">Thrown when MinimumGlucose &gt; MaximumGlucose.</exception>
         public static List<InsulinInfusionWithNearestGlucoseEntry> FilterByMinimumAndMaximumGlucose(
-            IEnumerable<InsulinInfusionWithNearestGlucoseEntry>? items,
+            this IEnumerable<InsulinInfusionWithNearestGlucoseEntry>? items,
             double minimumGlucose,
             double maximumGlucose)
         {
@@ -38,15 +38,16 @@ namespace Diary.Filter
         /// between infusion and matched glucose is less than or equal to <paramref name="maximumTimeDiff"/>.
         /// </summary>
         /// <param name="items">Source list of <see cref="InsulinInfusionWithNearestGlucoseEntry"/>.</param>
-        /// <param name="maximumTimeDiff">Maximum allowed absolute time difference (TimeSpan).</param>
+        /// <param name="minutes">Maximum allowed absolute time difference (minutes).</param>
         /// <returns>New list containing entries with |TimeDiff| &lt;= maximumTimeDiff.</returns>
-        /// <exception cref="ArgumentException">Thrown when <paramref name="maximumTimeDiff"/> is negative.</exception>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="minutes"/> is negative.</exception>
         public static List<InsulinInfusionWithNearestGlucoseEntry> FilterByMaximumTimeDiff(
-            IEnumerable<InsulinInfusionWithNearestGlucoseEntry>? items,
-            TimeSpan maximumTimeDiff)
+            this IEnumerable<InsulinInfusionWithNearestGlucoseEntry>? items,
+            int minutes)
         {
-            if (maximumTimeDiff < TimeSpan.Zero)
-                throw new ArgumentException($"{nameof(maximumTimeDiff)} must be non-negative.");
+            if (minutes < 0)
+                throw new ArgumentException($"{nameof(minutes)} must be non-negative.");
+            var maximumTimeDiff = TimeSpan.FromMinutes(minutes);
 
             if (items == null) return [];
 
@@ -64,7 +65,7 @@ namespace Diary.Filter
         /// <param name="excludeMinutesAfterBolus">Exclusion timespan in minutes after bolus</param>
         /// <returns>Filtered list excluding entries within bolus exclusion intervals.</returns>
         public static List<InsulinInfusionWithNearestGlucoseEntry> FilterTimeSpanAfterBolus(
-            List<InsulinInfusionWithNearestGlucoseEntry>? glucoseEntries,
+            this List<InsulinInfusionWithNearestGlucoseEntry>? glucoseEntries,
             List<InsulinBolusEntry>? insulinBoli,
             int excludeMinutesAfterBolus)
         {
