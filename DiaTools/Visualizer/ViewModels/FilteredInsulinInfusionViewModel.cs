@@ -28,8 +28,8 @@ public class FilteredInsulinInfusionViewModel : PlotViewModelBaseByTime
 
         var filteredData = report.InsulinInfusionWithNearestGlucose
             .FilterByMaximumTimeDiff(30)
-            .FilterByMinimumAndMaximumGlucose(80, 150)
-            .FilterTimeSpanAfterBolus(report.InsulinBoli, 240);
+            .FilterByMinimumAndMaximumGlucose(60, 250)
+            .FilterTimeSpanAfterBolus(report.InsulinBoli, 0);
 
         foreach (var i in filteredData.OrderBy(i => i.Time))
         {

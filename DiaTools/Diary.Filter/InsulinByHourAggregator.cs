@@ -11,7 +11,7 @@ public class InsulinByHourAggregator
         var result = new List<ValuePerHour>();
         for (int hour = 0; hour < 24; hour++)
         {
-            var bucket = new ValuePerHour
+            var valuePerHour = new ValuePerHour
             {
                 Hour = hour
             };
@@ -19,13 +19,14 @@ public class InsulinByHourAggregator
             var matchingEntries = valuesPerHourAndDay
                 .Where(v => 
                     v.Hour == currentHour &&
-                    v.CountInsulinUnitsPerHour >= minValuesPerHour);
+                    v.CountInsulinUnitsPerHour >= minValuesPerHour)
+                .ToArray();
             foreach (var entry in matchingEntries)
             {
-                bucket.InsulinUnitsPerHour.AddRange(entry.InsulinUnitsPerHour);
+                valuePerHour.InsulinUnitsPerHour.AddRange(entry.InsulinUnitsPerHour);
             }
-            bucket.DaysUsed = matchingEntries.Count();
-            result.Add(bucket);
+            valuePerHour.DaysUsed = matchingEntries.Length;
+            result.Add(valuePerHour);
         }
 
         if (ApplySmoothing)
@@ -35,8 +36,8 @@ public class InsulinByHourAggregator
                 var p = h - 1;
                 var c = h;
                 var n = h + 1;
-                if (h == 0) p = 24;
-                if (h == 24) n = 0;
+                if (h == 0) p = 23;
+                if (h == 23) n = 0;
                 result[h].SmoothedAverageInsulinPerHourPerDay=
                     (result[p].AverageInsulinPerHourPerDay +
                      result[c].AverageInsulinPerHourPerDay +
@@ -45,6 +46,15 @@ public class InsulinByHourAggregator
         }
         return result;
     }
-    public static bool ApplySmoothing { get; set; } = false;
+
+    private static double Median(List<double>? sorted)
+    {
+        if (sorted == null || sorted.Count == 0) return 0.0;
+        var n = sorted.Count;
+        if (n % 2 == 1) return sorted[n / 2];
+        return (sorted[n / 2 - 1] + sorted[n / 2]) / 2.0;
+    }
+
+    public static bool ApplySmoothing { get; set; } = true;
 }
 

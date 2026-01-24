@@ -8,7 +8,7 @@ namespace CamAPS.DataReader.Tests
         public void GivenAFilenameItCanReadData()
         {
             var reader = new TextFileReader();
-            var actual = reader.ReadLines("Data/camaps-data-20251226.txt");
+            var actual = reader.ReadLines("Data/camaps-data-20260115.txt");
             actual.Count.Should().BeGreaterThan(0);
         }
     }

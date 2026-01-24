@@ -84,5 +84,49 @@ namespace Diary.Aggregator
                         entry.Time < interval.End))
                 .ToList();
         }
+
+        /// <summary>
+        /// Filters out all <see cref="InsulinInfusionGlucoseEntry"/> instances whose glucose value
+        /// is greater than or equal to a given threshold and also removes all subsequent entries
+        /// within a specified time window.
+        /// </summary>
+        /// <param name="entries"> The input collection of <see cref="InsulinInfusionGlucoseEntry"/> objects. </param>
+        /// <param name="glucose"> The glucose threshold. Any entry with a <see cref="InsulinInfusionGlucoseEntry.GlucoseMgPerLitre"/>
+        /// value greater than or equal to this threshold will start an exclusion period. </param>
+        /// <param name="minutes"> The duration, in minutes, after the triggering entry during which all subsequent entries
+        /// will be excluded. </param>
+        /// <returns>
+        /// A list of <see cref="InsulinInfusionGlucoseEntry"/> objects with all entries removed that
+        /// either meet or exceed the glucose threshold or fall within the exclusion period that
+        /// follows such an entry.
+        /// </returns>
+        public static List<InsulinInfusionGlucoseEntry> FilterByGlucoseAndMinutes(
+            this IEnumerable<InsulinInfusionGlucoseEntry> entries,
+            double glucose,
+            int minutes)
+        {
+            var ordered = entries
+                .OrderBy(e => e.Time)
+                .ToList();
+
+            // Alle Startzeitpunkte, an denen der Glucose-Wert >= Schwelle ist
+            var exclusionIntervals = ordered
+                .Where(e => e.GlucoseMgPerLitre >= glucose)
+                .Select(e => new
+                {
+                    Start = e.Time,
+                    End = e.Time.AddMinutes(minutes)
+                })
+                .ToList();
+
+            // Alle Einträge entfernen, die in einem der Intervalle liegen
+            var result = ordered
+                .Where(e => !exclusionIntervals.Any(i =>
+                    e.Time >= i.Start && e.Time <= i.End))
+                .ToList();
+
+            return result;
+        }
+
     }
 }

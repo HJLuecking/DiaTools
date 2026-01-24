@@ -27,14 +27,17 @@ public partial class MainWindow : Window
     {
         try
         {
+            const string file = "camaps-data-20251226.txt";
+            //const string file = "camaps-data-20260115.txt";
+
             // Try to locate data file relative to app base directory (Data\...)
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            var candidate = Path.Combine(baseDir, "Data", "camaps-data-20251226.txt");
+            var candidate = Path.Combine(baseDir, "Data", file);
 
             // fallback: relative to working dir
             if (!File.Exists(candidate))
             {
-                candidate = Path.Combine(Environment.CurrentDirectory, "Data", "camaps-data-20251226.txt");
+                candidate = Path.Combine(Environment.CurrentDirectory, "Data", file);
             }
 
             if (!File.Exists(candidate))

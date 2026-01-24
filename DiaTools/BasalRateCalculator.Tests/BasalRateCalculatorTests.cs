@@ -11,7 +11,7 @@ namespace BasalRateCalculator.Tests
         {
             // Arrange
             var reader = new TextFileReader();
-            var lines = reader.ReadLines("Data/camaps-data-20251226.txt");
+            var lines = reader.ReadLines("Data/camaps-data-20260115.txt");
 
             var parser = new ReportParser();
             var report = parser.Parse(lines);
